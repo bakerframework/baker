@@ -55,6 +55,7 @@
 		BF0785EB1794AF4000EB988E /* info in Resources */ = {isa = PBXBuildFile; fileRef = BF0785EA1794AF4000EB988E /* info */; };
 		BF78D1B0180C8F070093DFBC /* BakerAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF78D1AF180C8F070093DFBC /* BakerAssets.xcassets */; };
 		BFAB78D317B2A67E00E91ADE /* BakerAnalyticsEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = BFAB78D217B2A67E00E91ADE /* BakerAnalyticsEvents.m */; };
+		FA338F671874C4890025A140 /* SharePage.m in Sources */ = {isa = PBXBuildFile; fileRef = FA338F661874C4890025A140 /* SharePage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -146,6 +147,8 @@
 		BF78D1AF180C8F070093DFBC /* BakerAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = BakerAssets.xcassets; path = Baker/BakerAssets.xcassets; sourceTree = "<group>"; };
 		BFAB78D117B2A67E00E91ADE /* BakerAnalyticsEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BakerAnalyticsEvents.h; sourceTree = "<group>"; };
 		BFAB78D217B2A67E00E91ADE /* BakerAnalyticsEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BakerAnalyticsEvents.m; sourceTree = "<group>"; };
+		FA338F651874C4890025A140 /* SharePage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharePage.h; sourceTree = "<group>"; };
+		FA338F661874C4890025A140 /* SharePage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharePage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,6 +214,8 @@
 				AB40042B15B4B83000D87E2A /* BakerViewController.m */,
 				AB40043315B4B83000D87E2A /* IndexViewController.h */,
 				AB40043415B4B83000D87E2A /* IndexViewController.m */,
+				FA338F651874C4890025A140 /* SharePage.h */,
+				FA338F661874C4890025A140 /* SharePage.m */,
 				AB40043515B4B83000D87E2A /* InterceptorWindow.h */,
 				AB40043615B4B83000D87E2A /* InterceptorWindow.m */,
 				AB40044C15B4B83000D87E2A /* ModalViewController.h */,
@@ -434,6 +439,7 @@
 				ABAFB59815AB9A2E002FA498 /* main.m in Sources */,
 				ABAFB59C15AB9A2E002FA498 /* AppDelegate.m in Sources */,
 				AB40045315B4B83000D87E2A /* BakerViewController.m in Sources */,
+				FA338F671874C4890025A140 /* SharePage.m in Sources */,
 				AB40045F15B4B83000D87E2A /* IndexViewController.m in Sources */,
 				AB40046115B4B83000D87E2A /* InterceptorWindow.m in Sources */,
 				AB40046315B4B83000D87E2A /* GTMNSString+HTML.m in Sources */,

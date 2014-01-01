@@ -37,6 +37,8 @@
 #import "SSZipArchive.h"
 #import "PageTitleLabel.h"
 #import "Utils.h"
+#import "SharePage.h"
+
 
 #define INDEX_FILE_NAME         @"index.html"
 
@@ -145,6 +147,14 @@
     [super viewDidLoad];
     self.navigationItem.title = book.title;
     
+    // SOCIAL MEDIA INTEGRATION - START
+    UIBarButtonItem *shareButton = [[[UIBarButtonItem alloc]
+                                     initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                     target:self
+                                     action:@selector(shareBtnAction:)]
+                                    autorelease];
+    self.navigationItem.rightBarButtonItem = shareButton;
+    // SOCIAL MEDIA INTEGRATION - END */
     
     // ****** SET THE INITIAL SIZE FOR EVERYTHING
     // Avoids strange animations when opening
@@ -181,6 +191,33 @@
         backgroundImagePortrait = [[UIImage imageWithContentsOfFile:backgroundPathPortrait] retain];
     }
 }
+// SOCIAL MEDIA INTEGRATION - START
+- (void) shareBtnAction:(UIButton *)sender {
+    
+    if (![self checkScreeshotForPage:currentPageNumber andOrientation:[self getCurrentInterfaceOrientation:self.interfaceOrientation]]) {
+        [self takeScreenshotFromView:currPage forPage:currentPageNumber andOrientation:[self getCurrentInterfaceOrientation:self.interfaceOrientation]];
+    }
+    
+    //  How do we get the url?
+    //  we need to work out how to parse the currently viewed page in baker
+    //  then we can run it through libxml, and use xpath to find the following elements
+    //  <meta property="og:title" content="The Rock" />
+    // <meta property="og:url"content="http://www.imdb.com/title/tt0117500/" />
+    
+    // items to share
+    //  NSURL *url = [NSURL URLWithString:@"http://www.thesaturdaypaper.com.au"];
+    NSArray *items =  @[[SharePage getShareTitle:currPage], [SharePage getShareURL:currPage]];
+    
+    
+    // create the controller
+    UIActivityViewController *controller = [[UIActivityViewController alloc]initWithActivityItems:items applicationActivities:nil];
+    
+    // Exclude Irrelevant Parts
+    controller.excludedActivityTypes = @[UIActivityTypePostToWeibo,UIActivityTypePrint,UIActivityTypeCopyToPasteboard,UIActivityTypeAssignToContact,UIActivityTypeSaveToCameraRoll];
+    [self presentViewController:controller animated:YES completion:nil];
+    
+}
+// SOCIAL MEDIA INTEGRATION - END */
 - (void)viewWillAppear:(BOOL)animated {
     
     if (!currentPageWillAppearUnderModal) {
