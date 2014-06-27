@@ -32,7 +32,19 @@
 
 #import <Foundation/Foundation.h>
 
-@interface BakerBook : NSObject
+@interface BakerBook : NSObject <NSXMLParserDelegate> {
+    NSMutableString *element;
+    NSString *opfFile;
+    NSString *opfDirectory;
+    NSMutableDictionary *manifest;
+    NSMutableArray *spine;
+    NSString *ePubTitle;
+    NSString *ePubAuthor;
+    NSString *ePubCreator;
+    NSString *ePubDate;
+    NSString *ePubID;
+    NSString *ePubStartPage;
+}
 
 #pragma mark - HPub Parameters Properties
 
@@ -98,6 +110,10 @@
 - (BOOL)validateString:(NSString *)string forParam:(NSString *)param;
 - (BOOL)validateNumber:(NSNumber *)number forParam:(NSString *)param;
 - (BOOL)matchParam:(NSString *)param againstParamsArray:(NSArray *)paramsArray;
+
+#pragma mark - ePub processing
+
+- (BOOL)convertEpubBookToHpub:(NSString *)bookJSONPath;
 
 #pragma mark - Book status management
 

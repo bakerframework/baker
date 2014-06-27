@@ -103,13 +103,14 @@
 - (id)initWithBookJSONPath:(NSString *)bookJSONPath
 {
     if (![[NSFileManager defaultManager] fileExistsAtPath:bookJSONPath]) {
-        return nil;
+        if (![self convertEpubBookToHpub:bookJSONPath])
+            return nil;
     }
 
     NSError* error = nil;
     NSData* bookJSON = [NSData dataWithContentsOfFile:bookJSONPath options:0 error:&error];
     if (error) {
-        NSLog(@"[BakerBook] ERROR reading 'book.json': %@", error.localizedDescription);
+        // NSLog(@"[BakerBook] ERROR reading 'book.json': %@", error.localizedDescription);
         return nil;
     }
 
@@ -117,7 +118,7 @@
                                                              options:0
                                                                error:&error];
     if (error) {
-        NSLog(@"[BakerBook] ERROR parsing 'book.json': %@", error.localizedDescription);
+        // NSLog(@"[BakerBook] ERROR parsing 'book.json': %@", error.localizedDescription);
         return nil;
     }
 
@@ -130,7 +131,7 @@
         NSString *baseID = [self.title stringByAppendingFormat:@" %@", [self.url stringSHAEncoded]];
         self.ID = [self sanitizeForPath:baseID];
 
-        NSLog(@"[BakerBook] 'book.json' parsed successfully. Book '%@' created with id '%@'.", self.title, self.ID);
+        // NSLog(@"[BakerBook] 'book.json' parsed successfully. Book '%@' created with id '%@'.", self.title, self.ID);
         return self;
     }
 
@@ -260,13 +261,13 @@
 {
     for (NSString *param in requirements) {
         if ([bookData objectForKey:param] == nil) {
-            NSLog(@"[BakerBook] ERROR: param '%@' is missing. Add it to 'book.json'.", param);
+            // NSLog(@"[BakerBook] ERROR: param '%@' is missing. Add it to 'book.json'.", param);
             return NO;
         }
     }
 
     for (NSString *param in bookData) {
-        //NSLog(@"[BakerBook] Validating 'book.json' param: '%@'.", param);
+        // NSLog(@"[BakerBook] Validating 'book.json' param: '%@'.", param);
 
         id obj = [bookData objectForKey:param];
         if ([obj isKindOfClass:[NSArray class]] && ![self validateArray:(NSArray *)obj forParam:param]) {
@@ -288,26 +289,26 @@
 
 
     if (![self matchParam:param againstParamsArray:shouldBeArray]) {
-        NSLog(@"[BakerBook] ERROR: param '%@' should not be an Array. Check it in 'book.json'.", param);
+        // NSLog(@"[BakerBook] ERROR: param '%@' should not be an Array. Check it in 'book.json'.", param);
         return NO;
     }
 
     if (([param isEqualToString:@"author"] || [param isEqualToString:@"contents"]) && [array count] == 0) {
-        NSLog(@"[BakerBook] ERROR: param '%@' is empty. Fill it in 'book.json'.", param);
+        // NSLog(@"[BakerBook] ERROR: param '%@' is empty. Fill it in 'book.json'.", param);
         return NO;
     }
 
     for (id obj in array) {
         if ([param isEqualToString:@"author"] && (![obj isKindOfClass:[NSString class]] || [(NSString *)obj isEqualToString:@""])) {
-            NSLog(@"[BakerBook] ERROR: param 'author' is empty. Fill it in 'book.json'.");
+            // NSLog(@"[BakerBook] ERROR: param 'author' is empty. Fill it in 'book.json'.");
             return NO;
         } else if ([param isEqualToString:@"contents"]) {
             if ([obj isKindOfClass:[NSDictionary class]] && ![self validateBookJSON:(NSDictionary *)obj withRequirements:[NSArray arrayWithObjects:@"url", nil]]) {
-                NSLog(@"[BakerBook] ERROR: param 'contents' is not validating. Check it in 'book.json'.");
+                // NSLog(@"[BakerBook] ERROR: param 'contents' is not validating. Check it in 'book.json'.");
                 return NO;
             }
         } else if (![obj isKindOfClass:[NSString class]]) {
-            NSLog(@"[BakerBook] ERROR: param '%@' type is wrong. Check it in 'book.json'.", param);
+            // NSLog(@"[BakerBook] ERROR: param '%@' type is wrong. Check it in 'book.json'.", param);
             return NO;
         }
     }
@@ -333,12 +334,12 @@
 
 
     if (![self matchParam:param againstParamsArray:shouldBeString]) {
-        NSLog(@"[BakerBook] ERROR: param '%@' should not be a String. Check it in 'book.json'.", param);
+        // NSLog(@"[BakerBook] ERROR: param '%@' should not be a String. Check it in 'book.json'.", param);
         return NO;
     }
 
     if (([param isEqualToString:@"title"] || [param isEqualToString:@"author"] || [param isEqualToString:@"url"]) && [string isEqualToString:@""]) {
-        NSLog(@"[BakerBook] ERROR: param '%@' is empty. Fill it in 'book.json'.", param);
+        // NSLog(@"[BakerBook] ERROR: param '%@' is empty. Fill it in 'book.json'.", param);
         return NO;
     }
 
@@ -347,8 +348,8 @@
     }
 
     if ([param isEqualToString:@"-baker-rendering"] && (![string isEqualToString:@"screenshots"] && ![string isEqualToString:@"three-cards"])) {
-        NSLog(@"Error: param \"-baker-rendering\" should be equal to \"screenshots\" or \"three-cards\" but it's not");
-        NSLog(@"[BakerBook] ERROR: param '-baker-rendering' must be equal to 'screenshots' or 'three-cards'. Check it in 'book.json'.");
+        // NSLog(@"Error: param \"-baker-rendering\" should be equal to \"screenshots\" or \"three-cards\" but it's not");
+        // NSLog(@"[BakerBook] ERROR: param '-baker-rendering' must be equal to 'screenshots' or 'three-cards'. Check it in 'book.json'.");
         return NO;
     }
 
@@ -371,7 +372,7 @@
 
 
     if (![self matchParam:param againstParamsArray:shouldBeNumber]) {
-        NSLog(@"[BakerBook] ERROR: param '%@' should not be a Number. Check it in 'book.json'.", param);
+        // NSLog(@"[BakerBook] ERROR: param '%@' should not be a Number. Check it in 'book.json'.", param);
         return NO;
     }
 
@@ -387,6 +388,185 @@
 
     return NO;
 }
+
+
+#pragma mark - ePub processing
+// One-time minimal conversion from ePub to Hpub. For a downloaded title this function will run the first time, and then
+// save the resulting book.json file to the document directory.
+- (BOOL)convertEpubBookToHpub:(NSString *)bookJSONPath {
+    
+    NSString *bookPath = [bookJSONPath stringByDeletingLastPathComponent];
+    
+    // META-INF/container.xml is the foundational document for ePubs. It defines the location of the OPF file, which in turn gives the contents of the package.
+    // If this exists, we use it to find the OPF file (often in OEBPS/content.opf, but not necessarily).
+    
+    NSString *containerXML = [bookPath stringByAppendingPathComponent:@"META-INF/container.xml"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:containerXML]) {
+         NSLog(@"ePub XML found.");
+        
+        
+        NSError *error;
+        NSXMLParser *parser = [[NSXMLParser alloc] initWithData:[NSData dataWithContentsOfFile:containerXML options:0 error:&error]];
+        [parser setDelegate:self];
+        [parser setShouldResolveExternalEntities:NO];
+        
+        [parser parse];
+        error = [parser parserError];
+        if (error) {
+            NSLog(@"[BakerBook] ERROR reading 'META-INF/container.xml': %@", error.localizedDescription);
+        }
+        else
+            NSLog(@"OK reading container.xml file.");
+        
+        [parser release];
+        
+        NSLog(@"opfFile: %@, opfDirectory: %@", opfFile, opfDirectory);
+        
+        NSString *opfFilePath = [bookPath stringByAppendingPathComponent:opfFile];
+        NSXMLParser *opfParser = [[NSXMLParser alloc] initWithData:[NSData dataWithContentsOfFile:opfFilePath options:0 error:&error]];
+        [opfParser setDelegate:self];
+        [opfParser setShouldResolveExternalEntities:NO];
+        
+        // There are two major parts of the OPF file: the manifest, which details each and every file in the epub package, and the spine, which defines the 'reading order' of the epub.
+        // The spine is what we can therefore use to create the page contents of the book.json file.
+        
+        manifest = [[NSMutableDictionary alloc] init];
+        spine = [[NSMutableArray alloc] init];
+        
+        [opfParser parse];
+        error = [opfParser parserError];
+        if (error)
+            NSLog(@"[BakerBook] ERROR reading '%@': %@", opfFilePath, error.localizedDescription);
+        
+        [opfParser release];
+        
+        return [self createBookJSONFromSpine:bookJSONPath];
+        
+    }
+    return FALSE;
+}
+
+- (BOOL)createBookJSONFromSpine:(NSString *)bookJSONPath {
+    
+    NSMutableDictionary *bookJSONDictionary = [[NSMutableDictionary alloc] init];
+    
+    // Create a book.json dictionary with reasonable defaults (change these as to your tastes, or externalise them to a global document):
+    [bookJSONDictionary setObject:[NSNumber numberWithInteger:1] forKey:@"hpub"];
+    [bookJSONDictionary setObject:ePubTitle forKey:@"title"];
+    if (!ePubAuthor) ePubAuthor = @"";
+    [bookJSONDictionary setObject:ePubAuthor forKey:@"author"];
+    if (ePubCreator) [bookJSONDictionary setObject:ePubCreator forKey:@"creator"];
+    if (ePubDate) [bookJSONDictionary setObject:ePubDate forKey:@"date"];
+    [bookJSONDictionary setObject:ePubID forKey:@"url"];
+    
+    [bookJSONDictionary setObject:@"#000000" forKey:@"-baker-background"];
+    [bookJSONDictionary setObject:@"#ffffff" forKey:@"-baker-page-numbers-color"];
+    [bookJSONDictionary setObject:[NSNumber numberWithFloat:0.3] forKey:@"-baker-page-numbers-alpha"];
+    [bookJSONDictionary setObject:@"screenshots" forKey:@"-baker-rendering"];
+    [bookJSONDictionary setObject:[NSNumber numberWithBool:YES] forKey:@"-baker-vertical-bounce"];
+    [bookJSONDictionary setObject:[NSNumber numberWithBool:NO] forKey:@"-baker-vertical-pagination"];
+    [bookJSONDictionary setObject:[NSNumber numberWithBool:YES] forKey:@"-baker-page-turn-tap"];
+    [bookJSONDictionary setObject:[NSNumber numberWithBool:YES] forKey:@"-baker-page-turn-swipe"];
+    [bookJSONDictionary setObject:[NSNumber numberWithBool:NO] forKey:@"-baker-media-autoplay"];
+    [bookJSONDictionary setObject:[NSNumber numberWithBool:NO] forKey:@"-baker-index-bounce"];
+    [bookJSONDictionary setObject:[NSNumber numberWithInteger:200] forKey:@"-baker-index-height"];
+    
+    if (ePubStartPage) {
+        NSUInteger fragmentLoc = [ePubStartPage rangeOfString:@"#"].location;
+        if (fragmentLoc != NSNotFound)
+            ePubStartPage = [ePubStartPage substringToIndex:fragmentLoc];
+        [bookJSONDictionary setObject:[NSNumber numberWithInteger:([spine indexOfObject:ePubStartPage]+1)] forKey:@"-baker-start-at-page"];
+    }
+    
+    [bookJSONDictionary setObject:spine forKey:@"contents"];
+    
+    NSError *error = nil;
+    NSData *bookJSONData = [NSJSONSerialization dataWithJSONObject:bookJSONDictionary options:0 error:&error];
+    if (bookJSONData) {
+        [bookJSONData writeToFile:bookJSONPath atomically:YES];
+    }
+    else {
+        NSLog(@"Write error: %@", error.localizedDescription);
+        [error release];
+        return FALSE;
+    }
+    
+    NSLog(@"bookJSONDictionary: %@", bookJSONDictionary);
+    
+    return TRUE;
+}
+
+
+#pragma mark - XML Parsing
+// What follows is some specific pattern matching to find the relevant entries in the OPF file, and match them up to entries in book.json
+-(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
+     NSLog(@"didStartElement: %@", elementName);
+    
+    if ([elementName isEqualToString:@"rootfile"]) {
+        if ([attributeDict objectForKey:@"full-path"]) {
+            opfFile = [attributeDict objectForKey:@"full-path"];
+            opfDirectory = [opfFile stringByDeletingLastPathComponent];
+        }
+    }
+    
+    if ([elementName isEqualToString:@"item"]) {
+        if (([attributeDict objectForKey:@"id"]) && ([attributeDict objectForKey:@"href"])) {
+            [manifest setObject:[attributeDict objectForKey:@"href"] forKey:[attributeDict objectForKey:@"id"]];
+        }
+    }
+    
+    if ([elementName isEqualToString:@"itemref"]) {
+        if ([attributeDict objectForKey:@"idref"]) {
+            NSString *filename = [manifest objectForKey:[attributeDict objectForKey:@"idref"]];
+            [spine addObject:[opfDirectory stringByAppendingPathComponent:filename]];
+        }
+    }
+    
+    if ([elementName isEqualToString:@"dc:title"] || [elementName isEqualToString:@"dc:creator"] || [elementName isEqualToString:@"dc:publisher"] || [elementName isEqualToString:@"dc:date"] || [elementName isEqualToString:@"dc:identifier"]) {
+        element = nil;
+        element = [[NSMutableString alloc] init];
+    }
+    
+    if ([elementName isEqualToString:@"reference"] && [attributeDict objectForKey:@"type"])
+        if ([[attributeDict objectForKey:@"type"] isEqualToString:@"text"])
+            ePubStartPage = [attributeDict objectForKey:@"href"];
+    if ([attributeDict objectForKey:@"epub:type=\"bodymatter\""])
+        ePubStartPage = [attributeDict objectForKey:@"epub:type=\"bodymatter\""];
+    
+}
+
+-(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
+    [element appendString:string];
+}
+
+-(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
+    if ([elementName isEqualToString:@"dc:title"]) {
+        ePubTitle = [NSString stringWithString:element];
+    }
+    if ([elementName isEqualToString:@"dc:creator"]) {
+        ePubAuthor = [NSString stringWithString:element];
+    }
+    if ([elementName isEqualToString:@"dc:publisher"]) {
+        ePubCreator = [NSString stringWithString:element];
+    }
+    if ([elementName isEqualToString:@"dc:date"]) {
+        ePubDate = [NSString stringWithString:element];
+    }
+    if ([elementName isEqualToString:@"dc:identifier"]) {
+        ePubID = [NSString stringWithString:element];
+    }
+}
+
+// error handling
+-(void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
+    NSLog(@"XMLParser error: %@", [parseError localizedDescription]);
+}
+
+-(void)parser:(NSXMLParser *)parser validationErrorOccurred:(NSError *)validationError {
+    NSLog(@"XMLParser error: %@", [validationError localizedDescription]);
+}
+
+
 
 #pragma mark - Book status management
 
