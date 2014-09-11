@@ -157,7 +157,7 @@
     if (![self validateBookJSON:bookData withRequirements:[NSArray arrayWithObjects:@"title", @"author", @"url", @"contents", nil]]) {
         return NO;
     }
-
+    
     self.hpub  = [bookData objectForKey:@"hpub"];
     self.title = [bookData objectForKey:@"title"];
     self.date  = [bookData objectForKey:@"date"];
@@ -265,29 +265,64 @@
         }
     }
 
-    for (NSString *param in bookData) {
-        //NSLog(@"[BakerBook] Validating 'book.json' param: '%@'.", param);
+    NSArray *shouldBeArray  = [NSArray arrayWithObjects:@"author",
+                               @"creator",
+                               @"contents", nil];
 
+    NSArray *shouldBeString = [NSArray arrayWithObjects:@"title",
+                               @"date",
+                               @"author",
+                               @"creator",
+                               @"publisher",
+                               @"url",
+                               @"cover",
+                               @"orientation",
+                               @"-baker-background",
+                               @"-baker-background-image-portrait",
+                               @"-baker-background-image-landscape",
+                               @"-baker-page-numbers-color",
+                               @"-baker-page-screenshots",
+                               @"-baker-rendering", nil];
+
+    NSArray *shouldBeNumber = [NSArray arrayWithObjects:@"hpub",
+                               @"zoomable",
+                               @"-baker-page-numbers-alpha",
+                               @"-baker-vertical-bounce",
+                               @"-baker-vertical-pagination",
+                               @"-baker-page-turn-tap",
+                               @"-baker-page-turn-swipe",
+                               @"-baker-media-autoplay",
+                               @"-baker-index-width",
+                               @"-baker-index-height",
+                               @"-baker-index-bounce",
+                               @"-baker-start-at-page", nil];
+    
+    NSArray *knownParams = [[shouldBeArray arrayByAddingObjectsFromArray:shouldBeString] arrayByAddingObjectsFromArray:shouldBeNumber];
+    
+    for (NSString *param in bookData) {
+
+        if (![self matchParam:param againstParamsArray:knownParams]) {
+            NSLog(@"[BakerBook] Validating 'book.json' skipping unknown param: '%@'.", param);
+            continue;
+        }
+//        NSLog(@"[BakerBook] Validating 'book.json' param: '%@'.", param);
+        
         id obj = [bookData objectForKey:param];
-        if ([obj isKindOfClass:[NSArray class]] && ![self validateArray:(NSArray *)obj forParam:param]) {
+        if ([obj isKindOfClass:[NSArray class]] && ![self validateArray:(NSArray *)obj forParam:param withParamsArray:shouldBeArray]) {
             return NO;
-        } else if ([obj isKindOfClass:[NSString class]] && ![self validateString:(NSString *)obj forParam:param]) {
+        } else if ([obj isKindOfClass:[NSString class]] && ![self validateString:(NSString *)obj forParam:param withParamsArray:shouldBeString]) {
             return NO;
-        } else if ([obj isKindOfClass:[NSNumber class]] && ![self validateNumber:(NSNumber *)obj forParam:param]) {
+        } else if ([obj isKindOfClass:[NSNumber class]] && ![self validateNumber:(NSNumber *)obj forParam:param withParamsArray:shouldBeNumber]) {
             return NO;
         }
     }
 
     return YES;
 }
-- (BOOL)validateArray:(NSArray *)array forParam:(NSString *)param
+- (BOOL)validateArray:(NSArray *)array forParam:(NSString *)param withParamsArray:(NSArray*)paramsArray
 {
-    NSArray *shouldBeArray  = [NSArray arrayWithObjects:@"author",
-                                                        @"creator",
-                                                        @"contents", nil];
 
-
-    if (![self matchParam:param againstParamsArray:shouldBeArray]) {
+    if (![self matchParam:param againstParamsArray:paramsArray]) {
         NSLog(@"[BakerBook] ERROR: param '%@' should not be an Array. Check it in 'book.json'.", param);
         return NO;
     }
@@ -314,25 +349,10 @@
 
     return YES;
 }
-- (BOOL)validateString:(NSString *)string forParam:(NSString *)param
+- (BOOL)validateString:(NSString *)string forParam:(NSString *)param withParamsArray:(NSArray*)paramsArray
 {
-    NSArray *shouldBeString = [NSArray arrayWithObjects:@"title",
-                                                        @"date",
-                                                        @"author",
-                                                        @"creator",
-                                                        @"publisher",
-                                                        @"url",
-                                                        @"cover",
-                                                        @"orientation",
-                                                        @"-baker-background",
-                                                        @"-baker-background-image-portrait",
-                                                        @"-baker-background-image-landscape",
-                                                        @"-baker-page-numbers-color",
-                                                        @"-baker-page-screenshots",
-                                                        @"-baker-rendering", nil];
 
-
-    if (![self matchParam:param againstParamsArray:shouldBeString]) {
+    if (![self matchParam:param againstParamsArray:paramsArray]) {
         NSLog(@"[BakerBook] ERROR: param '%@' should not be a String. Check it in 'book.json'.", param);
         return NO;
     }
@@ -354,23 +374,10 @@
 
     return YES;
 }
-- (BOOL)validateNumber:(NSNumber *)number forParam:(NSString *)param
+- (BOOL)validateNumber:(NSNumber *)number forParam:(NSString *)param withParamsArray:(NSArray*)paramsArray
 {
-    NSArray *shouldBeNumber = [NSArray arrayWithObjects:@"hpub",
-                                                        @"zoomable",
-                                                        @"-baker-page-numbers-alpha",
-                                                        @"-baker-vertical-bounce",
-                                                        @"-baker-vertical-pagination",
-                                                        @"-baker-page-turn-tap",
-                                                        @"-baker-page-turn-swipe",
-                                                        @"-baker-media-autoplay",
-                                                        @"-baker-index-width",
-                                                        @"-baker-index-height",
-                                                        @"-baker-index-bounce",
-                                                        @"-baker-start-at-page", nil];
 
-
-    if (![self matchParam:param againstParamsArray:shouldBeNumber]) {
+    if (![self matchParam:param againstParamsArray:paramsArray]) {
         NSLog(@"[BakerBook] ERROR: param '%@' should not be a Number. Check it in 'book.json'.", param);
         return NO;
     }
@@ -432,6 +439,7 @@
 
 - (void)dealloc
 {
+    
     [hpub release];
     [title release];
     [date release];
