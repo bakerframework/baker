@@ -62,7 +62,8 @@
 		case UIInterfaceOrientationPortraitUpsideDown: return @"UIInterfaceOrientationPortraitUpsideDown";
 		case UIInterfaceOrientationLandscapeLeft:      return @"UIInterfaceOrientationLandscapeLeft";
 		case UIInterfaceOrientationLandscapeRight:     return @"UIInterfaceOrientationLandscapeRight";
-	}
+        case UIInterfaceOrientationUnknown:            return @"UIInterfaceOrientationUnknown";
+    }
 	return nil;
 }
 
