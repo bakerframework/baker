@@ -348,7 +348,7 @@
         }
     }
 
-    totalPages = [pages count];
+    totalPages = (int)[pages count];
     NSLog(@"[BakerView]     Pages in this book: %d", totalPages);
 }
 - (void)startReading {
@@ -1067,7 +1067,7 @@
                     anchorFromURL  = [[url fragment] retain];
                     NSString *file = [[url relativePath] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 
-                    int page = [pages indexOfObject:file];
+                    NSInteger page = [pages indexOfObject:file];
                     if (page == NSNotFound)
                     {
                         NSString *params = [url query];
@@ -1093,7 +1093,7 @@
                     }
 
                     page = page + 1;
-                    if (![self changePage:page] && ![webView isEqual:indexViewController.view])
+                    if (![self changePage:(int)page] && ![webView isEqual:indexViewController.view])
                     {
                         if (anchorFromURL == nil) {
                             return YES;
@@ -1348,6 +1348,7 @@
             jsOrientationGetter = @"window.__defineGetter__('orientation', function() { return -90; });";
             break;
         default:
+            jsOrientationGetter = nil;
             break;
     }
 
