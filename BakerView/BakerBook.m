@@ -71,6 +71,7 @@
 @synthesize bakerPageTurnSwipe;
 @synthesize bakerMediaAutoplay;
 
+@synthesize bakerIndexFullscreen;
 @synthesize bakerIndexWidth;
 @synthesize bakerIndexHeight;
 @synthesize bakerIndexBounce;
@@ -203,6 +204,7 @@
     self.bakerPageTurnSwipe      = [bookData objectForKey:@"-baker-page-turn-swipe"];
     self.bakerMediaAutoplay      = [bookData objectForKey:@"-baker-media-autoplay"];
 
+    self.bakerIndexFullscreen  = [bookData objectForKey:@"-baker-index-fullscreen"];
     self.bakerIndexWidth  = [bookData objectForKey:@"-baker-index-width"];
     self.bakerIndexHeight = [bookData objectForKey:@"-baker-index-height"];
     self.bakerIndexBounce = [bookData objectForKey:@"-baker-index-bounce"];
@@ -251,6 +253,9 @@
 
     if (self.bakerIndexBounce == nil) {
         self.bakerIndexBounce = [NSNumber numberWithBool:NO];
+    }
+    if (self.bakerIndexFullscreen == nil) {
+        self.bakerIndexFullscreen = [NSNumber numberWithBool:NO];
     }
     if (self.bakerStartAtPage == nil) {
         self.bakerStartAtPage = [NSNumber numberWithInt:1];
@@ -368,6 +373,7 @@
                                                         @"-baker-page-turn-tap",
                                                         @"-baker-page-turn-swipe",
                                                         @"-baker-media-autoplay",
+                                                        @"-baker-index-fullscreen",
                                                         @"-baker-index-width",
                                                         @"-baker-index-height",
                                                         @"-baker-index-bounce",
@@ -469,6 +475,7 @@
     [bakerPageTurnSwipe release];
     [bakerMediaAutoplay release];
 
+    [bakerIndexFullscreen release];
     [bakerIndexWidth release];
     [bakerIndexHeight release];
     [bakerIndexBounce release];
