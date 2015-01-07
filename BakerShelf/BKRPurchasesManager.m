@@ -330,6 +330,7 @@
     } else {
         NSLog(@"ERROR: Completed transaction for %@, which is not a Product ID this app recognises", productId);
     }
+    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
 }
 
 - (void)restoreTransaction:(SKPaymentTransaction*)transaction {
