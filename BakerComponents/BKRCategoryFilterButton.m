@@ -30,38 +30,33 @@
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "BKRCategoryFilterItem.h"
+#import "BKRCategoryFilterButton.h"
+#import "BKRShelfViewController.h"
 
-@implementation BKRCategoryFilterItem {
+@implementation BKRCategoryFilterButton {
 
 }
 
 @synthesize delegate;
 
--(id)initWithCategories:(NSArray *)aCategories delegate:(NSObject *)aDelegate {
-    
-    // Initialize dropdown
-    if(self = [super initWithTitle:NSLocalizedString(@"ALL_CATEGORIES_TITLE", nil) style:UIBarButtonItemStylePlain target:self action:@selector(categoryFilterItemTouched:)]) {
-        
-        // Set categories
-        self.categories = aCategories;
-        
-        // Set delegate
-        self.delegate = aDelegate;
-    }
+-(id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    [self setTitle:NSLocalizedString(@"ALL_CATEGORIES_TITLE", nil) forState:UIControlStateNormal];
+    [self addTarget:self action:@selector(categoryFilterButtonTouched:) forControlEvents:UIControlEventTouchUpInside];
     return self;
 }
 
--(id)initWithDelegate:(NSObject *)aDelegate {
-    return [self initWithCategories:[NSArray array] delegate:aDelegate];
+-(void)setCategories:(NSArray *)aCategories delegate:(NSObject *)aDelegate {
+    self.categories = aCategories;
+    self.delegate = aDelegate;
 }
 
-- (IBAction)categoryFilterItemTouched:(UIBarButtonItem *)sender {
+- (void)categoryFilterButtonTouched:(UIButton *)sender {
     if (self.categoriesActionSheet.visible) {
         [self.categoriesActionSheet dismissWithClickedButtonIndex:(self.categoriesActionSheet.numberOfButtons - 1) animated:YES];
     } else {
         self.categoriesActionSheet = [self buildCategoriesActionSheet];
-        [self.categoriesActionSheet showFromBarButtonItem:sender animated:YES];
+        [self.categoriesActionSheet showFromRect:self.frame inView:self.superview animated:YES];
     }
 }
 
@@ -95,11 +90,11 @@
     if (actionSheet == self.categoriesActionSheet && buttonIndex > -1) {
         NSString *action = [self.categoriesActionSheetActions objectAtIndex:buttonIndex];
         if ([action isEqualToString:@"reset-filter"]) {
-            [self setTitle:NSLocalizedString(@"ALL_CATEGORIES_TITLE", nil)];
+            [self setTitle:NSLocalizedString(@"ALL_CATEGORIES_TITLE", nil) forState:UIControlStateNormal];
         } else {
-            [self setTitle:action];
+            [self setTitle:action forState:UIControlStateNormal];
         }
-        [self.delegate categoryFilterItem:self clickedAction:action];
+        [self.delegate categoryFilterButton:self clickedAction:action];
     }
 }
 

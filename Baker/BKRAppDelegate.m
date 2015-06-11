@@ -54,23 +54,16 @@
 }
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
-
     if ([BKRSettings sharedSettings].isNewsstand) {
         [self configureNewsstandApp:application options:launchOptions];
-    } else {
-        [self configureStandAloneApp:application options:launchOptions];
+    }else{
+        if([[BKRIssuesManager localBooksList] count] == 1) {
+            self.window.rootViewController = [[BKRBookViewController alloc] initWithIssue:[BKRIssuesManager localBooksList][0]];
+            [self.window makeKeyAndVisible];
+        }
     }
-
-    self.rootNavigationController = [[BKRCustomNavigationController alloc] initWithRootViewController:self.rootViewController];
-
-    [self configureNavigationBar];
-    [self configureAnalytics];
-
-    self.window = [[BKRInterceptorWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.window.backgroundColor    = [UIColor whiteColor];
-    self.window.rootViewController = self.rootNavigationController;
-    [self.window makeKeyAndVisible];
     
+    [self configureAnalytics];
     return YES;
 }
 
@@ -119,30 +112,7 @@
             dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
         }
     }
-    
-    self.rootViewController = [[BKRShelfViewController alloc] init];
 
-}
-
-- (void)configureStandAloneApp:(UIApplication*)application options:(NSDictionary*)launchOptions {
-    
-    NSLog(@"====== Baker Standalone Mode enabled ======");
-    NSArray *books = [BKRIssuesManager localBooksList];
-    if (books.count == 1) {
-        BKRBook *book = [books[0] bakerBook];
-        self.rootViewController = [[BKRBookViewController alloc] initWithBook:book];
-    } else  {
-        self.rootViewController = [[BKRShelfViewController alloc] initWithBooks:books];
-    }
-
-}
-
-- (void)configureNavigationBar {
-    BKRCustomNavigationBar *navigationBar = (BKRCustomNavigationBar*)self.rootNavigationController.navigationBar;
-    navigationBar.tintColor           = [UIColor bkrColorWithHexString:[BKRSettings sharedSettings].issuesActionBackgroundColor];
-    navigationBar.barTintColor        = [UIColor bkrColorWithHexString:@"ffffff"];
-    navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor bkrColorWithHexString:@"000000"]};
-    [navigationBar setBackgroundImage:[UIImage imageNamed:@"navigation-bar-bg"] forBarMetrics:UIBarMetricsDefault];
 }
 
 - (void)configureAnalytics {
@@ -245,6 +215,14 @@
         }];
     }];
 
+}
+
+- (BKRInterceptorWindow *)window {
+    static BKRInterceptorWindow *customWindow = nil;
+    if (!customWindow) {
+        customWindow = [[BKRInterceptorWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    }
+    return customWindow;
 }
 
 #pragma mark - Application Lifecycle

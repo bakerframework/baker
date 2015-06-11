@@ -114,15 +114,13 @@
         NSLog(@"Invalid product identifier: %@", productID);
     }
 
-    NSMutableSet *ids = [NSMutableSet setWithCapacity:response.products.count];
+    NSMutableSet *productIds = [NSMutableSet setWithCapacity:response.products.count];
     for (SKProduct *skProduct in response.products) {
         (self.products)[skProduct.productIdentifier] = skProduct;
-        [ids addObject:skProduct.productIdentifier];
+        [productIds addObject:skProduct.productIdentifier];
     }
 
-    NSDictionary *userInfo = @{@"ids": ids};
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"notification_products_retrieved" object:self userInfo:userInfo];
-
+    [self.delegate purchasesManager:self retrievedProductIds:productIds];
 }
 
 - (void)logProducts:(NSArray*)skProducts {
@@ -134,16 +132,11 @@
 
 - (void)request:(SKRequest*)request didFailWithError:(NSError*)error {
     NSLog(@"App Store request failure: %@", error);
-
     if (_enableProductRequestFailureNotifications) {
-        NSDictionary *userInfo = @{@"error": error};
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"notification_products_request_failed" object:self userInfo:userInfo];
+        [self.delegate purchasesManager:self productsRequestFailedWithError:error];
     }
-    
-    // @TODO: REMOVE CODE
-    NSDictionary *userInfo = @{@"ids": @[]};
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"notification_products_retrieved" object:self userInfo:userInfo];
-
+    NSMutableSet *productIds = [NSMutableSet set];
+    [self.delegate purchasesManager:self retrievedProductIds:productIds];
 }
 
 - (NSString*)priceFor:(NSString*)productID {
@@ -292,7 +285,7 @@
     }
 
     if (isRestoring) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"notification_multiple_restores" object:self userInfo:nil];
+        [self.delegate purchasesManager:self handleMultipleRestores:transactions];
     }
 }
 
@@ -320,42 +313,38 @@
 }
 
 - (void)completeTransaction:(SKPaymentTransaction*)transaction {
-    NSDictionary *userInfo = @{@"transaction": transaction};
     NSString *productId = transaction.payment.productIdentifier;
 
     if ([productId isEqualToString:[BKRSettings sharedSettings].freeSubscriptionProductId] || [[BKRSettings sharedSettings].autoRenewableSubscriptionProductIds containsObject:productId]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"notification_subscription_purchased" object:self userInfo:userInfo];
+        [self.delegate purchasesManager:self purchasedSubscriptionWithTransaction:transaction];
     } else if ([self productFor:productId]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"notification_issue_purchased" object:self userInfo:userInfo];
+        [self.delegate purchasesManager:self purchasedProductWithTransaction:transaction];
     } else {
         NSLog(@"ERROR: Completed transaction for %@, which is not a Product ID this app recognises", productId);
     }
 }
 
 - (void)restoreTransaction:(SKPaymentTransaction*)transaction {
-    NSDictionary *userInfo = @{@"transaction": transaction};
     NSString *productId = transaction.payment.productIdentifier;
 
     if ([productId isEqualToString:[BKRSettings sharedSettings].freeSubscriptionProductId] || [[BKRSettings sharedSettings].autoRenewableSubscriptionProductIds containsObject:productId]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"notification_subscription_restored" object:self userInfo:userInfo];
+        [self.delegate purchasesManager:self subscriptionRestoredForTransaction:transaction];
     } else if ([self productFor:productId]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"notification_issue_restored" object:self userInfo:userInfo];
+        [self.delegate purchasesManager:self productRestoredForTransaction:transaction];
     } else {
         NSLog(@"ERROR: Trying to restore %@, which is not a Product ID this app recognises", productId);
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"notification_restored_issue_not_recognised" object:self userInfo:userInfo];
+        [self.delegate purchasesManager:self handleNotRecognizedTransaction:transaction];
     }
 }
 
 - (void)failedTransaction:(SKPaymentTransaction*)transaction {
     NSLog(@"Payment transaction failure: %@", transaction.error);
-
-    NSDictionary *userInfo = @{@"transaction": transaction};
     NSString *productId = transaction.payment.productIdentifier;
-
+    
     if ([productId isEqualToString:[BKRSettings sharedSettings].freeSubscriptionProductId] || [[BKRSettings sharedSettings].autoRenewableSubscriptionProductIds containsObject:productId]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"notification_subscription_failed" object:self userInfo:userInfo];
+        [self.delegate purchasesManager:self subscriptionFailedForTransaction:transaction];
     } else {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"notification_issue_purchase_failed" object:self userInfo:userInfo];
+        [self.delegate purchasesManager:self productPurchaseFailedForTransaction:transaction];
     }
 
     [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
@@ -366,15 +355,12 @@
 }
 
 - (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue*)queue {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"notification_restore_finished" object:self userInfo:nil];
+    // @TODO: Handle restore finished event (UI alert)
 }
 
 - (void)paymentQueue:(SKPaymentQueue*)queue restoreCompletedTransactionsFailedWithError:(NSError*)error {
     NSLog(@"Transaction restore failure: %@", error);
-
-    NSDictionary *userInfo = @{@"error": error};
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"notification_restore_failed" object:self userInfo:userInfo];
+    [self.delegate purchasesManager:self restoreFailedWithError:error];
 }
 
 #pragma mark - Products

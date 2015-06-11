@@ -48,6 +48,8 @@
 - (NSSet*)productIDs;
 - (BOOL)hasProductIDs;
 - (BKRIssue*)latestIssue;
+- (BKRIssue*)issueWithId:(NSString *)issueId;
+- (BKRIssue*)issueWithProductId:(NSString *)productId;
 + (NSArray*)localBooksList;
 
 @end

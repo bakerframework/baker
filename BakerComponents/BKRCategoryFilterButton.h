@@ -32,13 +32,13 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol BKRCategoryFilterItemDelegate <NSObject>
+@protocol BKRCategoryFilterButtonDelegate <NSObject>
 @required
-- (void)categoryFilterItem:(id)categoryFilterItem clickedAction:(NSString *)action;
+- (void)categoryFilterButton:(id)categoryFilterButton clickedAction:(NSString *)action;
 @end
 
-@interface BKRCategoryFilterItem : UIBarButtonItem <UIActionSheetDelegate> {
-    id <BKRCategoryFilterItemDelegate> delegate;
+@interface BKRCategoryFilterButton : UIButton <UIActionSheetDelegate> {
+    id <BKRCategoryFilterButtonDelegate> delegate;
 }
 
 @property (retain) id delegate;
@@ -46,7 +46,8 @@
 @property (nonatomic, strong) NSArray *categoriesActionSheetActions;
 @property (nonatomic, strong) NSArray *categories;
 
--(id)initWithCategories:(NSArray *)aCategories delegate:(NSObject *)aDelegate;
--(id)initWithDelegate:(NSObject *)aDelegate;
+-(id)initWithCoder:(NSCoder *)aDecoder;
+-(void)setCategories:(NSArray *)aCategories delegate:(NSObject *)aDelegate;
+
 
 @end
