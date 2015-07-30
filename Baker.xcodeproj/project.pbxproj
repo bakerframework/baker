@@ -7,7 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1516E9A82269F7D283B594FD /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD96760CA8D891FC57F0FAFC /* libPods.a */; };
 		20CC551D16AD346900DEFB5C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 20CC551F16AD346900DEFB5C /* Localizable.strings */; };
+		7357EC701B6AAC6E00ECF8D2 /* ADMag.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7357EC6E1B6AAC6E00ECF8D2 /* ADMag.bundle */; };
+		7357EC711B6AAC6E00ECF8D2 /* ADMag.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7357EC6F1B6AAC6E00ECF8D2 /* ADMag.framework */; };
+		7357EC731B6AACF100ECF8D2 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7357EC721B6AACF100ECF8D2 /* libsqlite3.dylib */; };
+		7357EC751B6AACF600ECF8D2 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7357EC741B6AACF600ECF8D2 /* AdSupport.framework */; };
 		904033901A10FF230035071A /* BKRShelfViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 9040338F1A10FF230035071A /* BKRShelfViewLayout.m */; };
 		904C31E71A12645C00E53E66 /* BKRCategoryFilterItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 904C31E61A12645C00E53E66 /* BKRCategoryFilterItem.m */; };
 		9F55576815B4C6C3003072A3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F55576515B4C6B7003072A3 /* QuartzCore.framework */; };
@@ -69,10 +74,15 @@
 
 /* Begin PBXFileReference section */
 		20CC551E16AD346900DEFB5C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7357EC6E1B6AAC6E00ECF8D2 /* ADMag.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ADMag.bundle; sourceTree = "<group>"; };
+		7357EC6F1B6AAC6E00ECF8D2 /* ADMag.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ADMag.framework; sourceTree = "<group>"; };
+		7357EC721B6AACF100ECF8D2 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		7357EC741B6AACF600ECF8D2 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		9040338E1A10FF230035071A /* BKRShelfViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKRShelfViewLayout.h; sourceTree = "<group>"; };
 		9040338F1A10FF230035071A /* BKRShelfViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKRShelfViewLayout.m; sourceTree = "<group>"; };
 		904C31E51A12645C00E53E66 /* BKRCategoryFilterItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKRCategoryFilterItem.h; sourceTree = "<group>"; };
 		904C31E61A12645C00E53E66 /* BKRCategoryFilterItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKRCategoryFilterItem.m; sourceTree = "<group>"; };
+		9355ED579AB294487C8BD113 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		9F55576515B4C6B7003072A3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9F58D84D15D66E870027902C /* BKRCustomNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKRCustomNavigationBar.h; sourceTree = "<group>"; };
 		9F58D84E15D66E870027902C /* BKRCustomNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKRCustomNavigationBar.m; sourceTree = "<group>"; };
@@ -171,6 +181,8 @@
 		C66857A31A07DDBE00776443 /* NSObject+BakerExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+BakerExtensions.m"; sourceTree = "<group>"; };
 		C6F4FB971A0E6D9100E365F6 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		C6F4FB981A0E6D9100E365F6 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		CD96760CA8D891FC57F0FAFC /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		EED330881E456DF684F02265 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,22 +190,35 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7357EC751B6AACF600ECF8D2 /* AdSupport.framework in Frameworks */,
+				7357EC731B6AACF100ECF8D2 /* libsqlite3.dylib in Frameworks */,
 				AB67F5BC16EE9B79005A04F6 /* SystemConfiguration.framework in Frameworks */,
 				ABD245531639E3650080F056 /* AVFoundation.framework in Frameworks */,
 				ABABF1A81646C06100A75E67 /* StoreKit.framework in Frameworks */,
 				AB5D48D01609178900828D16 /* NewsstandKit.framework in Frameworks */,
 				ABAFB58C15AB9A2E002FA498 /* UIKit.framework in Frameworks */,
+				7357EC711B6AAC6E00ECF8D2 /* ADMag.framework in Frameworks */,
 				ABAFB58E15AB9A2E002FA498 /* Foundation.framework in Frameworks */,
 				ABAFB59015AB9A2E002FA498 /* CoreGraphics.framework in Frameworks */,
 				9F55576815B4C6C3003072A3 /* QuartzCore.framework in Frameworks */,
 				AB40048115B4B90200D87E2A /* MessageUI.framework in Frameworks */,
 				AB40048315B4B90A00D87E2A /* libz.dylib in Frameworks */,
+				1516E9A82269F7D283B594FD /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		18DB25CDDAA7E1B3D9BBA6A1 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9355ED579AB294487C8BD113 /* Pods.debug.xcconfig */,
+				EED330881E456DF684F02265 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		904C31E41A12645C00E53E66 /* BakerComponents */ = {
 			isa = PBXGroup;
 			children = (
@@ -322,6 +347,8 @@
 		ABAFB57C15AB9A2E002FA498 = {
 			isa = PBXGroup;
 			children = (
+				7357EC6E1B6AAC6E00ECF8D2 /* ADMag.bundle */,
+				7357EC6F1B6AAC6E00ECF8D2 /* ADMag.framework */,
 				AB40048415B4BB8B00D87E2A /* books */,
 				BF78D1AF180C8F070093DFBC /* BakerAssets.xcassets */,
 				AB40047B15B4B8B800D87E2A /* BakerShelf */,
@@ -330,6 +357,7 @@
 				ABAFB58A15AB9A2E002FA498 /* Frameworks */,
 				ABAFB58815AB9A2E002FA498 /* Products */,
 				904C31E41A12645C00E53E66 /* BakerComponents */,
+				18DB25CDDAA7E1B3D9BBA6A1 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -344,6 +372,8 @@
 		ABAFB58A15AB9A2E002FA498 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7357EC741B6AACF600ECF8D2 /* AdSupport.framework */,
+				7357EC721B6AACF100ECF8D2 /* libsqlite3.dylib */,
 				AB67F5BB16EE9B79005A04F6 /* SystemConfiguration.framework */,
 				ABABF1A51646C04D00A75E67 /* StoreKit.framework */,
 				ABD245521639E3650080F056 /* AVFoundation.framework */,
@@ -354,6 +384,7 @@
 				9F55576515B4C6B7003072A3 /* QuartzCore.framework */,
 				AB40048015B4B90200D87E2A /* MessageUI.framework */,
 				AB40048215B4B90A00D87E2A /* libz.dylib */,
+				CD96760CA8D891FC57F0FAFC /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -406,9 +437,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ABAFB5B415AB9A2F002FA498 /* Build configuration list for PBXNativeTarget "Baker" */;
 			buildPhases = (
+				CC2B03ACAEEA47660CD24705 /* Check Pods Manifest.lock */,
 				ABAFB58315AB9A2E002FA498 /* Sources */,
 				ABAFB58415AB9A2E002FA498 /* Frameworks */,
 				ABAFB58515AB9A2E002FA498 /* Resources */,
+				3103F9D33F5A3AD34A50A19A /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -449,6 +482,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7357EC701B6AAC6E00ECF8D2 /* ADMag.bundle in Resources */,
 				C659B2941A38BA3700CA238C /* newsstand-app-icon.png in Resources */,
 				C659B2951A38BA3700CA238C /* newsstand-app-icon@2x.png in Resources */,
 				C659B2961A38BA3700CA238C /* newsstand-app-icon@3x.png in Resources */,
@@ -461,6 +495,39 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3103F9D33F5A3AD34A50A19A /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CC2B03ACAEEA47660CD24705 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		ABAFB58315AB9A2E002FA498 /* Sources */ = {
@@ -592,10 +659,15 @@
 		};
 		ABAFB5B515AB9A2F002FA498 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9355ED579AB294487C8BD113 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Baker/Baker-Prefix.pch";
 				INFOPLIST_FILE = "Baker/Baker-Info.plist";
@@ -608,10 +680,15 @@
 		};
 		ABAFB5B615AB9A2F002FA498 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EED330881E456DF684F02265 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Baker/Baker-Prefix.pch";
 				INFOPLIST_FILE = "Baker/Baker-Info.plist";

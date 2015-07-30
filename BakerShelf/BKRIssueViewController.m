@@ -516,37 +516,30 @@
     
     BKRBook *book = nil;
     book = [[BKRBook alloc] initWithBookPath:self.issue.path bundled:NO];
-    ADMag *adapi = [ADMag sharedInstance];
     
-    [adapi cacheADsForIssueWithIdentifier:book.ID
-        issueName:@"Revista Daora"
-        issueCoverURL:@"http://www.gq.com/entertainment/tv/blogs/the-stream/cover-450.jpg"
-        publication:@(1)
+    //BEGIN ADMAG
+    ADMag *admagApi = [ADMag sharedInstance];
+    
+    [admagApi cacheADsForIssueWithIdentifier:book.ID
+        issueName:book.title
+        issueCoverURL:book.cover
+        publication:[BKRSettings sharedSettings].admagPublicationId
         numberOfPages:[book.contents count]
         blackList:nil
         pageStepBlock:nil
         completionBlock:^(NSInteger totalAdsSize) {
-            NSLog(@"Total Ads Size: %d", totalAdsSize);
+            NSLog(@"Total Ads Size: %ld", (long)totalAdsSize);
         }
         completionBlock:^(NSArray *cachedAdsPages) {
-        /*
-        //list pages where ads are inserted
-        for (NSNumber *nbr in cachedAdsPages) {
-            if (nbr.intValue < self.pages.count) {
-                UIImageView *imgView = [self.pages objectAtIndex:nbr.intValue-1];
-                [imgView removeFromSuperview];
+        
+            //list all insertions
+            for (ADMagAdsInfo *adsInfo in [admagApi infoAdsForIssueIdentifier:book.ID])
+            {
+                NSLog(@"Page Number:%tu Campaign: %@ UUID: %@", adsInfo.pageNumber , adsInfo.campaigName, adsInfo.uuid);
             }
         }
-
-        //list all insertions
-        for (ADMagAdsInfo *adsInfo in [api infoAdsForIssueIdentifier:@"1.RevistaDaora"])
-        {
-            NSLog(@"Page Number:%d Campaign: %@ UUID: %@", adsInfo.pageNumber , adsInfo.campaigName, adsInfo.uuid);
-            
-        }
-         */
-        }];
-         
+     ];
+    //END ADMAG
     
     self.issue.transientStatus = BakerIssueTransientStatusNone;
     [self refresh];

@@ -9,7 +9,7 @@
 	<key>newsstandLatestIssueCover</key>
 	<true/>
 	<key>newsstandManifestUrl</key>
-	<string>http://192.168.101.11/banca.json</string>
+	<string>http://bakerframework.com/demo/shelf.json</string>
 	<key>purchaseConfirmationUrl</key>
 	<string></string>
 	<key>purchasesUrl</key>
@@ -87,5 +87,9 @@
 	<string>#929292</string>
 	<key>issuesProgressbarTintColor</key>
 	<string>#bc242a</string>
+	<key>admagApiKey</key>
+	<string>456d31c3e67c6c2763b974e596989c34e4e24af9</string>
+	<key>admagPublicationId</key>
+	<string>1</string>
 </dict>
 </plist>
