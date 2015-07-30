@@ -42,6 +42,9 @@
 #import "BKRBookViewController.h"
 #import "BKRAnalyticsEvents.h"
 
+#import <ADMag/ADMag.h>
+#import <ADMag/ADMagAdsInfo.h>
+
 #pragma mark - Initialization
 
 @implementation BKRAppDelegate
@@ -54,7 +57,9 @@
 }
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
-
+    
+    [ADMag startWithAPIKey:@"456d31c3e67c6c2763b974e596989c34e4e24af9"];
+    
     if ([BKRSettings sharedSettings].isNewsstand) {
         [self configureNewsstandApp:application options:launchOptions];
     } else {

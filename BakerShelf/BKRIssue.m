@@ -40,6 +40,9 @@
 #import "NSURL+BakerExtensions.h"
 #import "NSObject+BakerExtensions.h"
 
+#import <ADMag/ADMag.h>
+#import <ADMag/ADMagAdsInfo.h>
+
 @implementation BKRIssue
 
 #pragma mark - Initialization
@@ -133,14 +136,16 @@
 - (void)download {
     BKRReachability *reach = [BKRReachability reachabilityWithHostname:@"www.google.com"];
     if ([reach isReachable]) {
+        
         BKRBakerAPI *api = [BKRBakerAPI sharedInstance];
         NSURLRequest *req = [api requestForURL:self.url method:@"GET"];
-
+        
         NKLibrary *nkLib = [NKLibrary sharedLibrary];
         NKIssue *nkIssue = [nkLib issueWithName:self.ID];
-
+        
         NKAssetDownload *assetDownload = [nkIssue addAssetWithRequest:req];
         [self downloadWithAsset:assetDownload];
+        
     } else {
         [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationDownloadErrorName object:self userInfo:nil];
     }
@@ -148,7 +153,7 @@
 
 - (void)downloadWithAsset:(NKAssetDownload*)asset {
     [asset downloadWithDelegate:self];
-    [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationDownloadStartedName object:self userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationDownloadStartedName object:self userInfo:nil];    
 }
 
 #pragma mark - Newsstand download management
