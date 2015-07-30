@@ -41,6 +41,9 @@
 #import "UIScreen+BakerExtensions.h"
 #import "BKRUtils.h"
 
+#import <ADMag/ADMag.h>
+#import <ADMag/ADMagAdsInfo.h>
+
 @implementation BKRIssueViewController
 
 #pragma mark - Init
@@ -510,6 +513,41 @@
 }
 
 - (void)handleDownloadFinished:(NSNotification*)notification {
+    
+    BKRBook *book = nil;
+    book = [[BKRBook alloc] initWithBookPath:self.issue.path bundled:NO];
+    ADMag *adapi = [ADMag sharedInstance];
+    
+    [adapi cacheADsForIssueWithIdentifier:book.ID
+        issueName:@"Revista Daora"
+        issueCoverURL:@"http://www.gq.com/entertainment/tv/blogs/the-stream/cover-450.jpg"
+        publication:@(1)
+        numberOfPages:[book.contents count]
+        blackList:nil
+        pageStepBlock:nil
+        completionBlock:^(NSInteger totalAdsSize) {
+            NSLog(@"Total Ads Size: %d", totalAdsSize);
+        }
+        completionBlock:^(NSArray *cachedAdsPages) {
+        /*
+        //list pages where ads are inserted
+        for (NSNumber *nbr in cachedAdsPages) {
+            if (nbr.intValue < self.pages.count) {
+                UIImageView *imgView = [self.pages objectAtIndex:nbr.intValue-1];
+                [imgView removeFromSuperview];
+            }
+        }
+
+        //list all insertions
+        for (ADMagAdsInfo *adsInfo in [api infoAdsForIssueIdentifier:@"1.RevistaDaora"])
+        {
+            NSLog(@"Page Number:%d Campaign: %@ UUID: %@", adsInfo.pageNumber , adsInfo.campaigName, adsInfo.uuid);
+            
+        }
+         */
+        }];
+         
+    
     self.issue.transientStatus = BakerIssueTransientStatusNone;
     [self refresh];
 }

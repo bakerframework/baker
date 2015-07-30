@@ -86,6 +86,38 @@
     return self;
 }
 
+- (id)initWithName:(NSString *)titleText color:(UIColor*)color alpha:(float)alpha {    
+    self = [super init];
+    if (self) {
+        CGSize titleDimension = CGSizeMake(672, 330);
+        UIFont *titleFont = [UIFont fontWithName:@"Helvetica" size:24.0];
+        
+        CGRect screenBounds = [[UIScreen mainScreen] bounds];
+        if (MIN(screenBounds.size.width, screenBounds.size.height) < 768) {
+            titleDimension = CGSizeMake(280, 134);
+            titleFont = [UIFont fontWithName:@"Helvetica" size:15.0];
+        }
+        
+        CGSize titleTextSize = [titleText boundingRectWithSize:titleDimension
+                                                       options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine
+                                                    attributes:@{NSFontAttributeName: titleFont}
+                                                       context:nil].size;
+        
+        self.frame           = CGRectMake(0, 0, titleTextSize.width, titleTextSize.height);
+        self.backgroundColor = [UIColor clearColor];
+        self.textAlignment   = NSTextAlignmentCenter;
+        self.lineBreakMode   = NSLineBreakByTruncatingTail;
+        self.numberOfLines   = 0;
+        self.textColor       = color;
+        self.alpha           = alpha;
+        self.font            = titleFont;
+        self.text            = titleText;
+        
+    }
+    return self;
+}
+
+
 - (void)setX:(CGFloat)x Y:(CGFloat)y {
     CGRect titleFrame = self.frame;
     titleFrame.origin.x = x;
