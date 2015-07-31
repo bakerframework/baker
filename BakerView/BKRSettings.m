@@ -114,16 +114,13 @@
         _issuesProgressbarTintColor          = [self stringSettingForKey:@"issuesProgressbarTintColor" withDefault:@"#bc242a"];
         
         _issuesShelfOptions                  = [self dictionarySettingForKey:@"issuesShelfOptions" withDefault:@{}];
-<<<<<<< HEAD
         _showSocialShareButton               = [self boolSettingForKey:@"showSocialShareButton" withDefault:NO];
-=======
         
         //ADMAG Ads
         _admagApiKey                         = [self stringSettingForKey:@"admagApiKey"
             withDefault:@""];
         _admagPublicationId                  = [self numberSettingForKey:@"admagPublicationId"
             withDefault:0];
->>>>>>> cd89b6cbe0dfd7659a36cd164a07f043baebb833
     
     }
     return self;
