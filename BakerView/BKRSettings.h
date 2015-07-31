@@ -115,14 +115,12 @@
 // Shelf background customization
 @property (nonatomic, readonly) NSDictionary *issuesShelfOptions;
 
-<<<<<<< HEAD
 // Social Share Button
 @property (nonatomic, readonly) BOOL showSocialShareButton;
-=======
+
 //Admag
 @property (nonatomic, readonly) NSString *admagApiKey;
 @property (nonatomic, readonly) NSNumber *admagPublicationId;
->>>>>>> cd89b6cbe0dfd7659a36cd164a07f043baebb833
 
 + (BKRSettings*)sharedSettings;
 
