@@ -583,7 +583,11 @@
         NKIssue *nkIssue = [nkLib issueWithName:self.issue.ID];
         NSString *name   = nkIssue.name;
         NSDate *date     = nkIssue.date;
-
+        
+        //delete admag ads
+        BKRBook *book = nil;
+        book = [[BKRBook alloc] initWithBookPath:self.issue.path bundled:NO];
+        [[ADMag sharedInstance] deleteAdsForIssueWithIdentifier:book.ID];
         [nkLib removeIssue:nkIssue];
 
         nkIssue = [nkLib addIssueWithName:name date:date];

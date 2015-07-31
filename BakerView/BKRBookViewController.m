@@ -1043,12 +1043,8 @@
 
     if (self.currentPageNumber != page) {
         
-        if ( self.currentPageNumber > page && [prevPage isKindOfClass:[ADMagWebView class]] ){
-            ADMagWebView *admagWebView = (ADMagWebView*)prevPage;
-            [admagWebView onHide];
-        }
-        if (self.currentPageNumber < page && [nextPage isKindOfClass:[ADMagWebView class]]){
-            ADMagWebView *admagWebView = (ADMagWebView*)nextPage;
+        if ([self.currPage isKindOfClass:[ADMagWebView class]]){
+            ADMagWebView *admagWebView = (ADMagWebView*)self.currPage;
             [admagWebView onHide];
         }
 
