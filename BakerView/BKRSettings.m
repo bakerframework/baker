@@ -77,7 +77,7 @@
         _isNewsstand                         = [self boolSettingForKey:@"isNewsstand" withDefault:YES];
         _newsstandLatestIssueCover           = [self boolSettingForKey:@"newsstandLatestIssueCover" withDefault:YES];
         
-        _newsstandManifestUrl                = [self stringSettingForKey:@"newsstandManifestUrl" withDefault:@"http://bakerframework.com/demo/shelf.json"];
+        _newsstandManifestUrl                = [self stringSettingForKey:@"newsstandManifestUrl" withDefault:@"http://localhost/banca.json"];
         _purchaseConfirmationUrl             = [self stringSettingForKey:@"purchaseConfirmationUrl" withDefault:@""];
         _purchasesUrl                        = [self stringSettingForKey:@"purchasesUrl" withDefault:@""];
         _postApnsTokenUrl                    = [self stringSettingForKey:@"postApnsTokenUrl" withDefault:@""];
@@ -114,6 +114,12 @@
         _issuesProgressbarTintColor          = [self stringSettingForKey:@"issuesProgressbarTintColor" withDefault:@"#bc242a"];
         
         _issuesShelfOptions                  = [self dictionarySettingForKey:@"issuesShelfOptions" withDefault:@{}];
+        
+        //ADMAG Ads
+        _admagApiKey                         = [self stringSettingForKey:@"admagApiKey"
+            withDefault:@""];
+        _admagPublicationId                  = [self numberSettingForKey:@"admagPublicationId"
+            withDefault:0];
     
     }
     return self;

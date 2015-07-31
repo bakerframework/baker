@@ -115,6 +115,10 @@
 // Shelf background customization
 @property (nonatomic, readonly) NSDictionary *issuesShelfOptions;
 
+//Admag
+@property (nonatomic, readonly) NSString *admagApiKey;
+@property (nonatomic, readonly) NSNumber *admagPublicationId;
+
 + (BKRSettings*)sharedSettings;
 
 @end

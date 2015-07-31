@@ -40,6 +40,9 @@
 #import "NSObject+BakerExtensions.h"
 #import "UIScreen+BakerExtensions.h"
 
+#import <ADMag/ADMag.h>
+#import <ADMag/ADMagAdsInfo.h>
+
 #define INDEX_FILE_NAME         @"index.html"
 
 #define URL_OPEN_MODALLY        @"referrer=Baker"
@@ -250,7 +253,7 @@
     int lastPageViewed = [bookStatus.page intValue];
     int bakerStartAtPage = [self.book.bakerStartAtPage intValue];
     self.currentPageNumber = 1;
-
+    
     if (currentPageFirstLoading && lastPageViewed != 0) {
         self.currentPageNumber = lastPageViewed;
     } else if (bakerStartAtPage < 0) {
@@ -317,8 +320,32 @@
     [pageDetails removeAllObjects];
 }
 - (void)buildPageArray {
+    
+    NSArray *ads = [[ADMag sharedInstance] infoAdsForIssueIdentifier:self.book.ID];
+    
     for (id page in self.book.contents) {
+        int index = [self.book.contents indexOfObject:page];
+        int numPage = 0;
+        
+        if (index <=1 ){
+            numPage = index + 1;
+        }else if (index == 3){
+            numPage = index + 2;
 
+        }else if (index >= 4){
+            numPage = index + 3;
+        }
+        
+        NSLog(@"INDEX: %d PAGE %d",index, numPage);
+        for (ADMagAdsInfo *adsInfo in ads)
+        {
+            if (numPage == (int)adsInfo.pageNumber){
+                NSLog(@"Open Page Number:%d Campaign: %@ UUID: %@", adsInfo.pageNumber , adsInfo.campaigName, adsInfo.uuid);
+                [pages addObject:@"ads"];
+                break;
+            }
+        }
+        
         NSString *pageFile = nil;
         if ([page isKindOfClass:[NSString class]]) {
             pageFile = [self.book.path stringByAppendingPathComponent:page];
@@ -331,8 +358,10 @@
         } else {
             NSLog(@"[BakerView] ERROR: Page %@ does not exist in %@.", page, self.book.path);
         }
-    }
+      
 
+    }
+    
     totalPages = (int)[pages count];
     NSLog(@"[BakerView]     Pages in this book: %d", totalPages);
 }
@@ -371,11 +400,12 @@
 }
 - (void)buildPageDetails {
     //NSLog(@"[BakerView] Init page details for the book pages");
-
+    
+    NSArray *ads = [[ADMag sharedInstance] infoAdsForIssueIdentifier:self.book.ID];
+    
     for (int i = 0; i < totalPages; i++) {
 
         UIColor *foregroundColor = [BKRUtils colorWithHexString:self.book.bakerPageNumbersColor];
-
 
         // ****** Background
         UIImageView *backgroundView = [[UIImageView alloc] initWithFrame:CGRectMake(pageWidth * i, 0, pageWidth, pageHeight)];
@@ -412,16 +442,30 @@
         }
 
         [self.scrollView addSubview:number];
-
-
-        // ****** Title
-        BKRPageTitleLabel *title = [[BKRPageTitleLabel alloc]initWithFile:pages[i] color:foregroundColor alpha:[self.book.bakerPageNumbersAlpha floatValue]];
+        
+        NSMutableDictionary *details;
+        BKRPageTitleLabel *title;
+        
+        if ([pages[i]  isEqual: @"ads"]){
+            int numPage = i + 1;
+            NSString *titleName;
+            for (ADMagAdsInfo *adsInfo in ads)
+            {
+                if (numPage == (int)adsInfo.pageNumber){
+                    titleName = adsInfo.campaigName;
+                    break;
+                }
+            }
+            title = [[BKRPageTitleLabel alloc]initWithName:titleName color:foregroundColor alpha:[self.book.bakerPageNumbersAlpha floatValue]];
+        }
+        else{
+           title = [[BKRPageTitleLabel alloc]initWithFile:pages[i] color:foregroundColor alpha:[self.book.bakerPageNumbersAlpha floatValue]];
+        }
+        
+        // ****** Store instances for later use
         [title setX:(pageWidth * i + ((pageWidth - title.frame.size.width) / 2)) Y:(pageHeight / 2 + 20)];
         [self.scrollView addSubview:title];
-
-
-        // ****** Store instances for later use
-        NSMutableDictionary *details = [NSMutableDictionary dictionaryWithObjectsAndKeys:spinner, @"spinner", number, @"number", title, @"title", backgroundView, @"background", nil];
+        details = [NSMutableDictionary dictionaryWithObjectsAndKeys:spinner, @"spinner", number, @"number", title, @"title", backgroundView, @"background", nil];
         [pageDetails insertObject:details atIndex:i];
     }
 }
@@ -571,9 +615,8 @@
 
     webView.backgroundColor = [UIColor clearColor];
     webView.opaque = NO;
-
-    webView.delegate = self;
-
+    [webView setDelegate:self];
+    
     webView.mediaPlaybackRequiresUserAction = ![self.book.bakerMediaAutoplay boolValue];
     webView.allowsInlineMediaPlayback = YES;
     webView.scalesPageToFit = [self.book.zoomable boolValue];
@@ -588,6 +631,7 @@
     if (!webView.scalesPageToFit) {
         [self removeWebViewDoubleTapGestureRecognizer:webView];
     }
+    webView.scalesPageToFit = TRUE;
 }
 - (void)removeWebViewDoubleTapGestureRecognizer:(UIView *)view
 {
@@ -651,7 +695,8 @@
 - (void)gotoPage {
 
     NSString *path = [NSString stringWithString:pages[self.currentPageNumber - 1]];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:path] && tapNumber != 0) {
+    
+    if (([[NSFileManager defaultManager] fileExistsAtPath:path] || [path isEqual:@"ads"]) && tapNumber != 0) {
 
         //NSLog(@"[BakerView] Goto page -> %@", [[NSFileManager defaultManager] displayNameAtPath:path]);
 
@@ -864,12 +909,28 @@
 }
 - (void)loadSlot:(int)slot withPage:(int)page {
     //NSLog(@"[BakerView] Setting up slot %d with page %d.", slot, page);
-
-    UIWebView *webView = [[UIWebView alloc] init];
-    [self setupWebView:webView];
-
-    webView.frame = [self frameForPage:page];
+    __block UIWebView *webView;
+    
+    if ([pages[page - 1]  isEqual: @"ads"]){
+        ADMag *adapi = [ADMag sharedInstance];
+        [adapi adWebViewForIssueWithIdentifier:self.book.ID
+                pageNumber:[NSNumber numberWithInt:page]
+                   success:^(ADMagWebView *webViewAdmag) {
+                       webView = webViewAdmag;
+                   } failure:^(NSError *error) {
+                       
+                   }
+        ];
+    }else{
+        webView = [[UIWebView alloc] init];
+    }
+    
     webView.hidden = YES;
+    
+    [self setupWebView:webView];
+    webView.frame = [self frameForPage:page];
+    
+    
 
     // ****** SELECT
     // Since pointers can change at any time we've got to handle them directly on a slot basis.
@@ -908,20 +969,26 @@
         prevPage = webView;
     }
 
-
     ((UIScrollView *)[webView subviews][0]).pagingEnabled = [self.book.bakerVerticalPagination boolValue];
-
+    
     [self.scrollView addSubview:webView];
-    [self loadWebView:webView withPage:page];
+    if (![pages[page - 1]  isEqual: @"ads"]){
+        [self loadWebView:webView withPage:page];
+    }
+    
 }
-- (BOOL)loadWebView:(UIWebView*)webView withPage:(int)page {
-
-    NSString *path = [NSString stringWithString:pages[page - 1]];
-
-    if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        NSLog(@"[BakerView] Loading: %@", [[NSFileManager defaultManager] displayNameAtPath:path]);
-        [webView loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:path]]];
+- (BOOL)loadWebView:(ADMagWebView*)webView withPage:(int)page {
+    
+    if ([pages[page - 1]  isEqual: @"ads"]){
         return YES;
+    }else{
+        NSString *path = [NSString stringWithString:pages[page - 1]];
+
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+            NSLog(@"[BakerView] Loading: %@", [[NSFileManager defaultManager] displayNameAtPath:path]);
+            [webView loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:path]]];
+            return YES;
+        }
     }
     return NO;
 }
@@ -975,6 +1042,11 @@
     NSLog(@"[BakerView] Swiping to page: %d", page);
 
     if (self.currentPageNumber != page) {
+        
+        if ([self.currPage isKindOfClass:[ADMagWebView class]]){
+            ADMagWebView *admagWebView = (ADMagWebView*)self.currPage;
+            [admagWebView onHide];
+        }
 
         lastPageNumber = self.currentPageNumber;
         self.currentPageNumber = page;
@@ -1269,11 +1341,24 @@
 
         [self handlePageLoading];
     }
-
-    /** CHECK IF META TAG SAYS HTML FILE SHOULD BE PAGED **/
-    [webView.scrollView setPagingEnabled:[BKRUtils webViewShouldBePaged:webView forBook:self.book]];
+    
+    
+    if ([self.currPage isKindOfClass:[ADMagWebView class]]){
+        ADMagWebView *admagWebView = (ADMagWebView*) self.currPage;
+        admagWebView.hidden = NO;
+        [admagWebView onShow];
+        
+        
+        /** CHECK IF META TAG SAYS HTML FILE SHOULD BE PAGED **/
+        [webView.scrollView setPagingEnabled:TRUE];
+    }else{
+        
+        /** CHECK IF META TAG SAYS HTML FILE SHOULD BE PAGED **/
+        [webView.scrollView setPagingEnabled:[BKRUtils webViewShouldBePaged:webView forBook:self.book]];
+    }
+    
 }
-- (void)webView:(UIWebView *)webView hidden:(BOOL)status animating:(BOOL)animating {
+- (void)webView:(ADMagWebView *)webView hidden:(BOOL)status animating:(BOOL)animating {
 
     //NSLog(@"[BakerView] webView hidden: %d animating: %d", status, animating);
 
@@ -1281,7 +1366,7 @@
 
         webView.hidden = NO;
         webView.alpha = 0.0;
-
+        
         [self.scrollView addSubview:webView];
         [UIView animateWithDuration:0.5
                          animations:^{ webView.alpha = 1.0; }

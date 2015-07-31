@@ -40,6 +40,9 @@
 #import "NSURL+BakerExtensions.h"
 #import "NSObject+BakerExtensions.h"
 
+#import <ADMag/ADMag.h>
+#import <ADMag/ADMagAdsInfo.h>
+
 @implementation BKRIssue
 
 #pragma mark - Initialization
@@ -57,7 +60,7 @@
         _productID  = @"";
         _price      = nil;
         _bakerBook  = book;
-
+        
         _coverPath = @"";
         if (book.cover == nil) {
             // TODO: set path to a default cover (right now a blank box will be displayed)
@@ -65,9 +68,9 @@
         } else {
             _coverPath = [book.path stringByAppendingPathComponent:book.cover];
         }
-
+        
         _transientStatus = BakerIssueTransientStatusNone;
-
+        
         [self setNotificationDownloadNames];
     }
     return self;
@@ -97,11 +100,11 @@
             self.productID = issueData[@"product_id"];
         }
         self.price = nil;
-
+        
         purchasesManager = [BKRPurchasesManager sharedInstance];
-
+        
         self.coverPath = [self.bkrCachePath stringByAppendingPathComponent:self.ID];
-
+        
         NKLibrary *nkLib = [NKLibrary sharedLibrary];
         NKIssue *nkIssue = [nkLib issueWithName:self.ID];
         if (nkIssue) {
@@ -109,11 +112,11 @@
         } else {
             self.path = nil;
         }
-
+        
         self.bakerBook = nil;
-
+        
         self.transientStatus = BakerIssueTransientStatusNone;
-
+        
         [self setNotificationDownloadNames];
     }
     return self;
@@ -133,14 +136,16 @@
 - (void)download {
     BKRReachability *reach = [BKRReachability reachabilityWithHostname:@"www.google.com"];
     if ([reach isReachable]) {
+        
         BKRBakerAPI *api = [BKRBakerAPI sharedInstance];
         NSURLRequest *req = [api requestForURL:self.url method:@"GET"];
-
+        
         NKLibrary *nkLib = [NKLibrary sharedLibrary];
         NKIssue *nkIssue = [nkLib issueWithName:self.ID];
-
+        
         NKAssetDownload *assetDownload = [nkIssue addAssetWithRequest:req];
         [self downloadWithAsset:assetDownload];
+        
     } else {
         [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationDownloadErrorName object:self userInfo:nil];
     }
@@ -155,7 +160,7 @@
 
 - (void)connection:(NSURLConnection*)connection didWriteData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes {
     NSDictionary *userInfo = @{@"totalBytesWritten": @(totalBytesWritten),
-                              @"expectedTotalBytes": @(expectedTotalBytes)};
+                               @"expectedTotalBytes": @(expectedTotalBytes)};
     [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationDownloadProgressingName object:self userInfo:userInfo];
 }
 
@@ -166,16 +171,16 @@
 }
 
 - (void)unpackAssetDownload:(NKAssetDownload*)newsstandAssetDownload toURL:(NSURL*)destinationURL {
-
+    
     UIApplication *application = [UIApplication sharedApplication];
     NKIssue *nkIssue           = newsstandAssetDownload.issue;
     NSString *destinationPath  = [[nkIssue contentURL] path];
-
+    
     __block UIBackgroundTaskIdentifier backgroundTask = [application beginBackgroundTaskWithExpirationHandler:^{
         [application endBackgroundTask:backgroundTask];
         backgroundTask = UIBackgroundTaskInvalid;
     }];
-
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSLog(@"[BakerShelf] Newsstand - File is being unzipped to %@", destinationPath);
         BOOL unzipSuccessful = NO;
@@ -186,23 +191,23 @@
                 [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationUnzipErrorName object:self userInfo:nil];
             });
         }
-
+        
         NSLog(@"[BakerShelf] Newsstand - Removing temporary downloaded file %@", [destinationURL path]);
         NSFileManager *fileMgr = [NSFileManager defaultManager];
         NSError *error;
         if ([fileMgr removeItemAtPath:[destinationURL path] error:&error] != YES){
             NSLog(@"[BakerShelf] Newsstand - Unable to delete file: %@", [error localizedDescription]);
         }
-
+        
         if (unzipSuccessful) {
             // Notification and UI update have to be handled on the main thread
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationDownloadFinishedName object:self userInfo:nil];
             });
         }
-
+        
         [self updateNewsstandIcon];
-
+        
         [application endBackgroundTask:backgroundTask];
         backgroundTask = UIBackgroundTaskInvalid;
     });
@@ -210,7 +215,7 @@
 
 - (void)updateNewsstandIcon {
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
-
+    
     UIImage *coverImage = [UIImage imageWithContentsOfFile:self.coverPath];
     if (coverImage) {
         [[UIApplication sharedApplication] setNewsstandIconImage:coverImage];
@@ -222,9 +227,9 @@
 
 - (void)connection:(NSURLConnection*)connection didFailWithError:(NSError*)error {
     NSLog(@"Connection error when trying to download %@: %@", [connection currentRequest].URL, [error localizedDescription]);
-
+    
     [connection cancel];
-
+    
     NSDictionary *userInfo = @{@"error": error};
     [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationDownloadErrorName object:self userInfo:userInfo];
 }
@@ -264,7 +269,7 @@
             default:
                 break;
         }
-
+        
         NKLibrary *nkLib = [NKLibrary sharedLibrary];
         NKIssue *nkIssue = [nkLib issueWithName:self.ID];
         NSString *nkIssueStatus = [self nkIssueContentStatusToString:[nkIssue status]];
