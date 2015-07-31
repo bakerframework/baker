@@ -41,6 +41,9 @@
 #import "UIScreen+BakerExtensions.h"
 #import "BKRUtils.h"
 
+#import <ADMag/ADMag.h>
+#import <ADMag/ADMagAdsInfo.h>
+
 @implementation BKRIssueViewController
 
 #pragma mark - Init
@@ -510,6 +513,34 @@
 }
 
 - (void)handleDownloadFinished:(NSNotification*)notification {
+    
+    BKRBook *book = nil;
+    book = [[BKRBook alloc] initWithBookPath:self.issue.path bundled:NO];
+    
+    //BEGIN ADMAG
+    ADMag *admagApi = [ADMag sharedInstance];
+    
+    [admagApi cacheADsForIssueWithIdentifier:book.ID
+        issueName:book.title
+        issueCoverURL:book.cover
+        publication:[BKRSettings sharedSettings].admagPublicationId
+        numberOfPages:[book.contents count]
+        blackList:nil
+        pageStepBlock:nil
+        completionBlock:^(NSInteger totalAdsSize) {
+            NSLog(@"Total Ads Size: %ld", (long)totalAdsSize);
+        }
+        completionBlock:^(NSArray *cachedAdsPages) {
+        
+            //list all insertions
+            for (ADMagAdsInfo *adsInfo in [admagApi infoAdsForIssueIdentifier:book.ID])
+            {
+                NSLog(@"Page Number:%tu Campaign: %@ UUID: %@", adsInfo.pageNumber , adsInfo.campaigName, adsInfo.uuid);
+            }
+        }
+     ];
+    //END ADMAG
+    
     self.issue.transientStatus = BakerIssueTransientStatusNone;
     [self refresh];
 }
@@ -552,7 +583,11 @@
         NKIssue *nkIssue = [nkLib issueWithName:self.issue.ID];
         NSString *name   = nkIssue.name;
         NSDate *date     = nkIssue.date;
-
+        
+        //delete admag ads
+        BKRBook *book = nil;
+        book = [[BKRBook alloc] initWithBookPath:self.issue.path bundled:NO];
+        [[ADMag sharedInstance] deleteAdsForIssueWithIdentifier:book.ID];
         [nkLib removeIssue:nkIssue];
 
         nkIssue = [nkLib addIssueWithName:name date:date];

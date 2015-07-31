@@ -34,6 +34,7 @@
 
 @interface BKRPageTitleLabel : UILabel
 
+- (id)initWithName:(NSString*)name color:(UIColor*)color alpha:(float)alpha;
 - (id)initWithFile:(NSString*)path color:(UIColor*)color alpha:(float)alpha;
 - (id)initWithFileContent:(NSString*)fileContent color:(UIColor*)color alpha:(float)alpha;
 - (void)setX:(CGFloat)x Y:(CGFloat)y;
