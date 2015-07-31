@@ -114,6 +114,7 @@
         _issuesProgressbarTintColor          = [self stringSettingForKey:@"issuesProgressbarTintColor" withDefault:@"#bc242a"];
         
         _issuesShelfOptions                  = [self dictionarySettingForKey:@"issuesShelfOptions" withDefault:@{}];
+        _showSocialShareButton               = [self boolSettingForKey:@"showSocialShareButton" withDefault:NO];
     
     }
     return self;

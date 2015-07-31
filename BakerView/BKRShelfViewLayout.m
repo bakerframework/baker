@@ -63,7 +63,7 @@
         if (offset.y < minY) {
             
             // Figure out how much we've pulled down
-            CGFloat deltaY = fabsf(offset.y - minY);
+            CGFloat deltaY = fabs(offset.y - minY);
             
             for (UICollectionViewLayoutAttributes *attrs in attributes) {
                 

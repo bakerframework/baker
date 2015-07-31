@@ -216,7 +216,7 @@
     self.infoLabel.text          = self.issue.info;
     [self.infoLabel sizeToFit];
 
-    heightOffset = heightOffset + self.infoLabel.frame.size.height + 5;
+//    heightOffset = heightOffset + self.infoLabel.frame.size.height + 5;
 
     heightOffset = 130 + textLineheight + 10;
 
@@ -238,7 +238,7 @@
     self.loadingLabel.frame = CGRectMake(ui.contentOffset + self.spinner.frame.size.width + 10, heightOffset, 135, 30);
     self.loadingLabel.font = actionFont;
 
-    heightOffset = heightOffset + self.loadingLabel.frame.size.height + 5;
+//    heightOffset = heightOffset + self.loadingLabel.frame.size.height + 5;
 
     // SETUP PROGRESS BAR
     self.progressBar.frame = CGRectMake(ui.contentOffset, 136, labelWidth, 30);

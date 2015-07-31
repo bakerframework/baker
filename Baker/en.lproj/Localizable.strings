@@ -106,3 +106,8 @@
 
 // Categories
 "ALL_CATEGORIES_TITLE" = "All Categories";
+
+//Social share button
+//Im' reading the ISSUE_NAME from APPNAME. Checkit at BOOK.URL 
+"SOCIAL_SHARE_BUTTON_MESSAGE" = "I'm reading \"%@\" from \"%@\". Check it at %@";
+

@@ -135,7 +135,9 @@
     }
     
     //truncate data to match actual output length
-    outputBytes = realloc(outputBytes, (unsigned long)outputLength);
+    if (outputLength > 0) {
+        outputBytes = realloc(outputBytes, (unsigned long)outputLength);
+    }
     NSString *result = [[NSString alloc] initWithBytesNoCopy:outputBytes length:(NSUInteger)outputLength encoding:NSASCIIStringEncoding freeWhenDone:YES];
 
 #if !__has_feature(objc_arc)

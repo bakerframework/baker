@@ -50,8 +50,20 @@
     if (self) {
     
         // ****** Add here your analytics code
-        // tracker = [[GAI sharedInstance] trackerWithTrackingId:@"ADD_HERE_YOUR_TRACKING_CODE"];
-    
+        
+        //GAI Configuration
+        // Optional: automatically send uncaught exceptions to Google Analytics.
+        //[GAI sharedInstance].trackUncaughtExceptions = YES;
+        
+        // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
+        //[GAI sharedInstance].dispatchInterval = 20;
+        
+        // Optional: set Logger to VERBOSE for debug information.
+        //[[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
+        
+        // Initialize tracker. Replace with your tracking ID.
+        //[[GAI sharedInstance] trackerWithTrackingId:@"UA-XXXX-Y"];
+        
         // ****** Register to handle events
         [self registerEvents];
 
@@ -90,6 +102,8 @@
 
 - (void)receiveEvent:(NSNotification*)notification {
     //NSLog(@"[BakerAnalyticsEvent] Received event %@", notification.name); // Uncomment this to debug
+    //GAI Activation
+    //id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     
     // If you want, you can handle differently the various events
     if ([notification.name isEqualToString:@"BakerApplicationStart"]) {

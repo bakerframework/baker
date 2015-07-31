@@ -115,6 +115,9 @@
 // Shelf background customization
 @property (nonatomic, readonly) NSDictionary *issuesShelfOptions;
 
+// Social Share Button
+@property (nonatomic, readonly) BOOL showSocialShareButton;
+
 + (BKRSettings*)sharedSettings;
 
 @end

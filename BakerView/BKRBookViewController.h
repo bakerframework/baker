@@ -114,6 +114,7 @@
 @property (nonatomic, strong) BKRBook *book;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIWebView *currPage;
+@property (nonatomic, strong) UIBarButtonItem *shareButton;
 
 @property (nonatomic, assign) int currentPageNumber;
 @property (nonatomic, assign) BOOL barsHidden;

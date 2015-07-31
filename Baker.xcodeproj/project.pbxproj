@@ -425,7 +425,12 @@
 		ABAFB57E15AB9A2E002FA498 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0630;
+				TargetAttributes = {
+					ABAFB58615AB9A2E002FA498 = {
+						DevelopmentTeam = D98EH4D5B2;
+					};
+				};
 			};
 			buildConfigurationList = ABAFB58115AB9A2E002FA498 /* Build configuration list for PBXProject "Baker" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -540,6 +545,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -575,6 +581,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
