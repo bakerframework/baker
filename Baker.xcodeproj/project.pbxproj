@@ -347,8 +347,6 @@
 		ABAFB57C15AB9A2E002FA498 = {
 			isa = PBXGroup;
 			children = (
-				7357EC761B6BFC9900ECF8D2 /* ADMag.bundle */,
-				7357EC6F1B6AAC6E00ECF8D2 /* ADMag.framework */,
 				AB40048415B4BB8B00D87E2A /* books */,
 				BF78D1AF180C8F070093DFBC /* BakerAssets.xcassets */,
 				AB40047B15B4B8B800D87E2A /* BakerShelf */,
@@ -374,6 +372,8 @@
 			children = (
 				7357EC741B6AACF600ECF8D2 /* AdSupport.framework */,
 				7357EC721B6AACF100ECF8D2 /* libsqlite3.dylib */,
+				7357EC761B6BFC9900ECF8D2 /* ADMag.bundle */,
+				7357EC6F1B6AAC6E00ECF8D2 /* ADMag.framework */,
 				AB67F5BB16EE9B79005A04F6 /* SystemConfiguration.framework */,
 				ABABF1A51646C04D00A75E67 /* StoreKit.framework */,
 				ABD245521639E3650080F056 /* AVFoundation.framework */,
