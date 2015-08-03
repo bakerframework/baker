@@ -1,3 +1,9 @@
+Admag
+=============
+
+**Integração Baker com rede Admag. Para compilar seu projeto faça o clone do projeto e rode #pod install dentro do terminal.
+Feito isto abra ele no Xcode e edite o arquivo settings.plist com os dados relacionado a sua publicação.
+
 Project Baker
 =============
 
