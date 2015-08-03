@@ -31,6 +31,10 @@
 //
 
 #import "BKRAnalyticsEvents.h"
+#import "BKRSettings.h"
+#import <ADMag/GAI.h>
+#import <ADMag/GAIDictionaryBuilder.h>
+#import "BKRBookViewController.h"
 
 @implementation BKRAnalyticsEvents
 
@@ -53,16 +57,16 @@
         
         //GAI Configuration
         // Optional: automatically send uncaught exceptions to Google Analytics.
-        //[GAI sharedInstance].trackUncaughtExceptions = YES;
+        [GAI sharedInstance].trackUncaughtExceptions = YES;
         
         // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
-        //[GAI sharedInstance].dispatchInterval = 20;
+        [GAI sharedInstance].dispatchInterval = 20;
         
         // Optional: set Logger to VERBOSE for debug information.
         //[[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
         
         // Initialize tracker. Replace with your tracking ID.
-        //[[GAI sharedInstance] trackerWithTrackingId:@"UA-XXXX-Y"];
+        [[GAI sharedInstance] trackerWithTrackingId:[BKRSettings sharedSettings].googleAnalyticsID];
         
         // ****** Register to handle events
         [self registerEvents];
@@ -103,27 +107,40 @@
 - (void)receiveEvent:(NSNotification*)notification {
     //NSLog(@"[BakerAnalyticsEvent] Received event %@", notification.name); // Uncomment this to debug
     //GAI Activation
-    //id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     
     // If you want, you can handle differently the various events
     if ([notification.name isEqualToString:@"BakerApplicationStart"]) {
-        // Track here when the Baker app opens
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"     // Event category (required)
+                                                              action:@"open"  // Event action (required)
+                                                               label:@"Baker App Open"          // Event label
+                                                               value:nil] build]];    // Event value
     } else if ([notification.name isEqualToString:@"BakerIssueDownload"]) {
-        // Track here when a issue download is requested
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"     // Event category (required)
+                                                              action:@"download"  // Event action (required)
+                                                               label:@"Baker Issue Download"          // Event label
+                                                               value:nil] build]];    // Event value
     } else if ([notification.name isEqualToString:@"BakerIssueOpen"]) {
-        // Track here when a issue is opened to be read
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"     // Event category (required)
+                                                              action:@"open"  // Event action (required)
+                                                               label:@"Baker Issue Open"          // Event label
+                                                               value:nil] build]];    // Event value
     } else if ([notification.name isEqualToString:@"BakerIssueClose"]) {
-        // Track here when a issue that was being read is closed
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"     // Event category (required)
+                                                              action:@"open"  // Event action (required)
+                                                               label:@"Baker Issue Close"          // Event label
+                                                               value:nil] build]];    // Event value
     } else if ([notification.name isEqualToString:@"BakerIssuePurchase"]) {
         // Track here when a issue purchase is requested
     } else if ([notification.name isEqualToString:@"BakerIssueArchive"]) {
-        // Track here when a issue archival is requested
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"     // Event category (required)
+                                                              action:@"open"  // Event action (required)
+                                                               label:@"Baker Issue Archive"          // Event label
+                                                               value:nil] build]];    // Event value
     } else if ([notification.name isEqualToString:@"BakerSubscriptionPurchase"]) {
         // Track here when a subscription purchased is requested
     } else if ([notification.name isEqualToString:@"BakerViewPage"]) {
         // Track here when a specific page is opened
-        // BakerViewController *bakerview = [notification object]; // Uncomment this to get the BakerViewController object and get its properties
-        //NSLog(@" - Tracking page %d", bakerview.currentPageNumber); // This is useful to check if it works
     } else if ([notification.name isEqualToString:@"BakerViewIndexOpen"]) {
         // Track here the opening of the index and status bar
     } else if ([notification.name isEqualToString:@"BakerViewModalBrowser"]) {

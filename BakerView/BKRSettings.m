@@ -121,7 +121,14 @@
             withDefault:@""];
         _admagPublicationId                  = [self numberSettingForKey:@"admagPublicationId"
             withDefault:0];
-    
+        _googleAnalyticsID                   = [self stringSettingForKey:@"googleAnalyticsID"
+            withDefault:@""];
+        
+        //Parse push
+        _parseApplicationId                  = [self stringSettingForKey:@"parseApplicationId"
+                                                              withDefault:@""];
+        _parseClientKey                      = [self stringSettingForKey:@"parseClientKey"
+                                                            withDefault:@""];
     }
     return self;
 }

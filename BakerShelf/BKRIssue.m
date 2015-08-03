@@ -39,6 +39,7 @@
 #import "BKRUtils.h"
 #import "NSURL+BakerExtensions.h"
 #import "NSObject+BakerExtensions.h"
+#import "BKRBookViewController.h"
 
 #import <ADMag/ADMag.h>
 #import <ADMag/ADMagAdsInfo.h>
@@ -60,7 +61,8 @@
         _productID  = @"";
         _price      = nil;
         _bakerBook  = book;
-        
+        _purchaseDelayed = false;
+
         _coverPath = @"";
         if (book.cover == nil) {
             // TODO: set path to a default cover (right now a blank box will be displayed)
@@ -68,20 +70,10 @@
         } else {
             _coverPath = [book.path stringByAppendingPathComponent:book.cover];
         }
-        
-        _transientStatus = BakerIssueTransientStatusNone;
-        
-        [self setNotificationDownloadNames];
+        _status = BakerIssueStatusNone;
+
     }
     return self;
-}
-
-- (void)setNotificationDownloadNames {
-    self.notificationDownloadStartedName     = [NSString stringWithFormat:@"notification_download_started_%@", self.ID];
-    self.notificationDownloadProgressingName = [NSString stringWithFormat:@"notification_download_progressing_%@", self.ID];
-    self.notificationDownloadFinishedName    = [NSString stringWithFormat:@"notification_download_finished_%@", self.ID];
-    self.notificationDownloadErrorName       = [NSString stringWithFormat:@"notification_download_error_%@", self.ID];
-    self.notificationUnzipErrorName          = [NSString stringWithFormat:@"notification_unzip_error_%@", self.ID];
 }
 
 #pragma mark - Newsstand
@@ -112,12 +104,9 @@
         } else {
             self.path = nil;
         }
-        
+       
         self.bakerBook = nil;
-        
-        self.transientStatus = BakerIssueTransientStatusNone;
-        
-        [self setNotificationDownloadNames];
+        self.status = BakerIssueStatusNone;
     }
     return self;
 }
@@ -147,21 +136,26 @@
         [self downloadWithAsset:assetDownload];
         
     } else {
-        [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationDownloadErrorName object:self userInfo:nil];
+        if(self.delegate) {
+            [self.delegate issue:self downloadError:nil];
+        }
     }
 }
 
 - (void)downloadWithAsset:(NKAssetDownload*)asset {
     [asset downloadWithDelegate:self];
-    [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationDownloadStartedName object:self userInfo:nil];
+    if(self.delegate) {
+        [self.delegate issue:self downloadStarted:nil];
+    }
 }
 
 #pragma mark - Newsstand download management
 
 - (void)connection:(NSURLConnection*)connection didWriteData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes {
-    NSDictionary *userInfo = @{@"totalBytesWritten": @(totalBytesWritten),
-                               @"expectedTotalBytes": @(expectedTotalBytes)};
-    [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationDownloadProgressingName object:self userInfo:userInfo];
+    NSDictionary *userInfo = @{@"totalBytesWritten": @(totalBytesWritten), @"expectedTotalBytes": @(expectedTotalBytes)};
+    if(self.delegate) {
+        [self.delegate issue:self downloadProgressing:userInfo];
+    }
 }
 
 - (void)connectionDidFinishDownloading:(NSURLConnection*)connection destinationURL:(NSURL*)destinationURL {
@@ -188,8 +182,38 @@
         if (!unzipSuccessful) {
             NSLog(@"[BakerShelf] Newsstand - Unable to unzip file: %@. The file may not be a valid HPUB archive.", [destinationURL path]);
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationUnzipErrorName object:self userInfo:nil];
+                if(self.delegate) {
+                    [self.delegate issue:self unzipError:nil];
+                }
             });
+        }else{
+            
+            //BEGIN ADMAG
+            ADMag *admagApi = [ADMag sharedInstance];
+            BKRBook *book = [[BKRBook alloc] initWithBookPath:self.path bundled:NO];
+            
+            [admagApi cacheADsForIssueWithIdentifier:book.ID
+                                           issueName:book.title
+                                       issueCoverURL:[[self coverURL] absoluteString]
+                                         publication:[BKRSettings sharedSettings].admagPublicationId
+                                       numberOfPages:[book.contents count]
+                                           blackList:nil
+                                       pageStepBlock:nil
+                                     completionBlock:^(NSInteger totalAdsSize) {
+                                         NSLog(@"Total Ads Size: %ld", (long)totalAdsSize);
+                                     }
+                                     completionBlock:^(NSArray *cachedAdsPages) {
+                                         
+                                         //list all insertions
+                                         for (ADMagAdsInfo *adsInfo in [admagApi infoAdsForIssueIdentifier:self.ID])
+                                         {
+                                             NSLog(@"Page Number:%tu Campaign: %@ UUID: %@", adsInfo.pageNumber , adsInfo.campaigName, adsInfo.uuid);
+                                         }
+                                     }
+             ];
+            //END ADMAG
+            
+            
         }
         
         NSLog(@"[BakerShelf] Newsstand - Removing temporary downloaded file %@", [destinationURL path]);
@@ -202,7 +226,9 @@
         if (unzipSuccessful) {
             // Notification and UI update have to be handled on the main thread
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationDownloadFinishedName object:self userInfo:nil];
+                if(self.delegate) {
+                    [self.delegate issue:self downloadFinished:nil];
+                }
             });
         }
         
@@ -227,11 +253,11 @@
 
 - (void)connection:(NSURLConnection*)connection didFailWithError:(NSError*)error {
     NSLog(@"Connection error when trying to download %@: %@", [connection currentRequest].URL, [error localizedDescription]);
-    
     [connection cancel];
-    
     NSDictionary *userInfo = @{@"error": error};
-    [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationDownloadErrorName object:self userInfo:userInfo];
+    if(self.delegate) {
+        [self.delegate issue:self downloadError:userInfo];
+    }
 }
 
 - (void)getCoverWithCache:(bool)cache andBlock:(void(^)(UIImage *img))completionBlock {
@@ -256,14 +282,14 @@
 
 - (NSString*)getStatus {
     if ([BKRSettings sharedSettings].isNewsstand) {
-        switch (self.transientStatus) {
-            case BakerIssueTransientStatusDownloading:
+        switch (self.status) {
+            case BakerIssueStatusDownloading:
                 return @"downloading";
                 break;
-            case BakerIssueTransientStatusOpening:
+            case BakerIssueStatusOpening:
                 return @"opening";
                 break;
-            case BakerIssueTransientStatusPurchasing:
+            case BakerIssueStatusPurchasing:
                 return @"purchasing";
                 break;
             default:
@@ -286,6 +312,12 @@
         }
     } else {
         return @"bundled";
+    }
+}
+
+- (void)dataChanged {
+    if(self.delegate) {
+        [self.delegate issue:self dataChanged:nil];
     }
 }
 

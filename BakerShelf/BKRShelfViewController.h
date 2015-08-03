@@ -38,60 +38,61 @@
 #import "BKRShelfStatus.h"
 #import "BKRBakerAPI.h"
 #import "BKRPurchasesManager.h"
-#import "BKRCategoryFilterItem.h"
+#import "BKRCategoryFilterButton.h"
+#import "BKRShelfViewLayout.h"
+#import "BKRIssueCell.h"
 
 @class BKRShelfHeaderView;
 
-@interface BKRShelfViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UIActionSheetDelegate, UIWebViewDelegate, BKRCategoryFilterItemDelegate> {
+@interface BKRShelfViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UIActionSheetDelegate, UIWebViewDelegate, BKRCategoryFilterButtonDelegate, BKRIssueCellDelegate, BKRPurchasesManagerDelegate> {
     BKRBakerAPI *api;
     BKRIssuesManager *issuesManager;
     NSMutableArray *notRecognisedTransactions;
     UIPopoverController *infoPopover;
     BKRPurchasesManager *purchasesManager;
-    UIInterfaceOrientation realInterfaceOrientation;
 }
 
 @property (nonatomic, copy) NSArray *issues;
 @property (nonatomic, copy) NSArray *supportedOrientation;
 
-@property (nonatomic, strong) NSMutableArray *issueViewControllers;
 @property (nonatomic, strong) BKRShelfStatus *shelfStatus;
 
-@property (nonatomic, strong) UICollectionView *gridView;
+@property (nonatomic, strong) IBOutlet UICollectionView *gridView;
+@property (nonatomic, strong) IBOutlet BKRShelfViewLayout *layout;
 @property (nonatomic, strong) CAGradientLayer *gradientLayer;
-@property (nonatomic, strong) BKRShelfHeaderView *headerView;
-@property (nonatomic, strong) UIBarButtonItem *refreshButton;
-@property (nonatomic, strong) UIBarButtonItem *subscribeButton;
-@property (strong, nonatomic) UIBarButtonItem *infoItem;
-@property (strong, nonatomic) BKRCategoryFilterItem *categoryItem;
+@property (nonatomic, strong) IBOutlet BKRShelfHeaderView *headerView;
+@property (nonatomic, strong) IBOutlet UIButton *refreshButton;
+@property (nonatomic, strong) IBOutlet UIButton *subscribeButton;
+@property (strong, nonatomic) IBOutlet UIButton *infoButton;
+@property (strong, nonatomic) IBOutlet BKRCategoryFilterButton *categoryButton;
 
 @property (nonatomic, strong) UIActionSheet *subscriptionsActionSheet;
 @property (nonatomic, strong) NSArray *subscriptionsActionSheetActions;
 @property (nonatomic, strong) UIAlertView *blockingProgressView;
 
 @property (nonatomic, copy) NSString *bookToBeProcessed;
+@property (nonatomic, strong) BKRIssue *issueToBeRead;
+
+- (IBAction)handleInfoButtonPressed:(id)sender;
 
 #pragma mark - Init
-- (id)init;
-- (id)initWithBooks:(NSArray*)currentBooks;
+- (id)initWithCoder:(NSCoder *)aDecoder;
+- (void)configureForNewsstand;
+- (void)configureWithBooks:(NSArray*)currentBooks;
 
 #pragma mark - Shelf data source
-- (void)handleRefresh:(NSNotification*)notification;
-
-#pragma mark - Store Kit
-- (void)handleSubscription:(NSNotification*)notification;
+- (IBAction)handleRefresh:(id)sender;
 
 #pragma mark - Navigation management
 - (void)readIssue:(BKRIssue*)issue;
-- (void)handleReadIssue:(NSNotification*)notification;
 - (void)receiveBookProtocolNotification:(NSNotification*)notification;
 - (void)handleBookToBeProcessed;
-- (void)pushViewControllerWithBook:(BKRBook*)book;
+- (void)pushViewControllerWithIssue:(BKRIssue*)issue;
 
 #pragma mark - Buttons management
-- (void)setrefreshButtonEnabled:(BOOL)enabled;
+- (void)setRefreshButtonEnabled:(BOOL)enabled;
 - (void)setSubscribeButtonEnabled:(BOOL)enabled;
-- (void)handleSubscribeButtonPressed:(NSNotification *)notification;
+- (IBAction)handleSubscribeButtonPressed:(id)sender;
 
 #pragma mark - Helper methods
 - (int)getBannerHeight;

@@ -36,6 +36,7 @@
 #import "BKRIndexViewController.h"
 #import "BKRModalWebViewController.h"
 #import "BKRBook.h"
+#import "BKRIssue.h"
 #import "BKRBookStatus.h"
 
 @class Downloader;
@@ -112,16 +113,19 @@
 #pragma mark - Properties
 
 @property (nonatomic, strong) BKRBook *book;
-@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) BKRIssue *issue;
+@property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) UIWebView *currPage;
-@property (nonatomic, strong) UIBarButtonItem *shareButton;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *shareButton;
 
 @property (nonatomic, assign) int currentPageNumber;
 @property (nonatomic, assign) BOOL barsHidden;
 
 #pragma mark - Initialization
 
-- (id)initWithBook:(BKRBook*)bakerBook;
+- (id)initWithIssue:(BKRIssue *)issue;
+- (void)configureWithIssue:(BKRIssue *)issue;
+
 - (BOOL)loadBookWithBookPath:(NSString*)bookPath;
 - (void)cleanupBookEnvironment;
 - (void)resetPageSlots;
@@ -204,5 +208,9 @@
 #pragma mark - Index View
 
 - (BOOL)isIndexView:(UIWebView*)webView;
+
+#pragma mark - Actions
+
+- (IBAction)handleShareButtonPressed:(id)sender;
 
 @end
