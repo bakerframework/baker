@@ -12,6 +12,8 @@
 	<dict>
 		<key>482A922F308FB7C409D53544D2F6481C8BFEE75D</key>
 		<string>https://github.com/Admag/baker</string>
+		<key>514DB239CF54172A99D75C239D29EBEB28A8AA4A</key>
+		<string>https://github.com/Admag/lib-SDK-Admag-iOS</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Baker.xcworkspace</string>
@@ -19,6 +21,8 @@
 	<dict>
 		<key>482A922F308FB7C409D53544D2F6481C8BFEE75D</key>
 		<string>..</string>
+		<key>514DB239CF54172A99D75C239D29EBEB28A8AA4A</key>
+		<string>../../lib-SDK-Admag-iOS</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/Admag/baker</string>
@@ -35,6 +39,14 @@
 			<string>482A922F308FB7C409D53544D2F6481C8BFEE75D</string>
 			<key>IDESourceControlWCCName</key>
 			<string>baker</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>514DB239CF54172A99D75C239D29EBEB28A8AA4A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>lib-SDK-Admag-iOS</string>
 		</dict>
 	</array>
 </dict>
