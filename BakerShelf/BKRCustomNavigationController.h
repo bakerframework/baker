@@ -34,4 +34,6 @@
 
 @interface BKRCustomNavigationController : UINavigationController
 
+@property (nonatomic, copy) UIColor *originalTitleColor;
+
 @end

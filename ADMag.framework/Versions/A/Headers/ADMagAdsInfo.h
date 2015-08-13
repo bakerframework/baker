@@ -8,7 +8,7 @@
 
 @interface ADMagAdsInfo:NSObject
 
-@property(nonatomic) NSInteger* pageNumber;
+@property(nonatomic) NSInteger pageNumber;
 @property(nonatomic, copy) NSString* campaigName;
 @property(nonatomic, copy) NSString* uuid;
 

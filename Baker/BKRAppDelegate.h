@@ -38,7 +38,7 @@
 @interface BKRAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (nonatomic, strong) BKRInterceptorWindow *window;
-@property (nonatomic, strong) UIViewController *rootViewController;
-@property (nonatomic, strong) UINavigationController *rootNavigationController;
+@property (nonatomic, strong) IBOutlet UIViewController *rootViewController;
+@property (nonatomic, strong) IBOutlet UINavigationController *rootNavigationController;
 
 @end

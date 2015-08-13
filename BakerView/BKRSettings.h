@@ -122,6 +122,13 @@
 @property (nonatomic, readonly) NSString *admagApiKey;
 @property (nonatomic, readonly) NSNumber *admagPublicationId;
 
+//Google Analytics
+@property (nonatomic, readonly) NSString *googleAnalyticsID;
+
+//Parse Push
+@property (nonatomic, readonly) NSString *parseApplicationId;
+@property (nonatomic, readonly) NSString *parseClientKey;
+
 + (BKRSettings*)sharedSettings;
 
 @end
