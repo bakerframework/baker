@@ -95,7 +95,7 @@
     [super viewDidLoad];
 
     // Configure navigation bar
-    self.navigationItem.title = NSLocalizedString(@"SHELF_NAVIGATION_TITLE", nil);
+    self.navigationItem.title = NSLocalizedString([[[NSBundle mainBundle] infoDictionary]  objectForKey:@"CFBundleDisplayName"], nil);
     
     // Configure shelf layout
     [self.layout setHeaderReferenceSize:[self getBannerSize]];

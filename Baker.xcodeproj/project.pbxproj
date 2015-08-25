@@ -21,6 +21,7 @@
 		73040CC41B6FF77C00D0D213 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73040CC31B6FF77C00D0D213 /* Accounts.framework */; };
 		7357EC731B6AACF100ECF8D2 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7357EC721B6AACF100ECF8D2 /* libsqlite3.dylib */; };
 		7357EC751B6AACF600ECF8D2 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7357EC741B6AACF600ECF8D2 /* AdSupport.framework */; };
+		73DBC11C1B8CA18D009AED5B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73DBC11B1B8CA18D009AED5B /* StoreKit.framework */; };
 		904033901A10FF230035071A /* BKRShelfViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 9040338F1A10FF230035071A /* BKRShelfViewLayout.m */; };
 		904C31E71A12645C00E53E66 /* BKRCategoryFilterButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 904C31E61A12645C00E53E66 /* BKRCategoryFilterButton.m */; };
 		90F4908A1B26FDDD0010A4D9 /* BKRStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 90F490891B26FDDD0010A4D9 /* BKRStoryboard.storyboard */; };
@@ -61,7 +62,6 @@
 		AB5D48D01609178900828D16 /* NewsstandKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB5D48CD1609176A00828D16 /* NewsstandKit.framework */; };
 		AB67F5BA16EE99B2005A04F6 /* BKRReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = AB67F5B916EE99B2005A04F6 /* BKRReachability.m */; };
 		AB67F5BC16EE9B79005A04F6 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB67F5BB16EE9B79005A04F6 /* SystemConfiguration.framework */; };
-		ABABF1A81646C06100A75E67 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABABF1A51646C04D00A75E67 /* StoreKit.framework */; };
 		ABADF3F916C7BAD900F52F3C /* NSURL+BakerExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = ABADF3F816C7BAD900F52F3C /* NSURL+BakerExtensions.m */; };
 		ABAFB58C15AB9A2E002FA498 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABAFB58B15AB9A2E002FA498 /* UIKit.framework */; };
 		ABAFB58E15AB9A2E002FA498 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABAFB58D15AB9A2E002FA498 /* Foundation.framework */; };
@@ -110,6 +110,7 @@
 		73040CC31B6FF77C00D0D213 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		7357EC721B6AACF100ECF8D2 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		7357EC741B6AACF600ECF8D2 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		73DBC11B1B8CA18D009AED5B /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		9040338E1A10FF230035071A /* BKRShelfViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKRShelfViewLayout.h; sourceTree = "<group>"; };
 		9040338F1A10FF230035071A /* BKRShelfViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKRShelfViewLayout.m; sourceTree = "<group>"; };
 		904C31E51A12645C00E53E66 /* BKRCategoryFilterButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKRCategoryFilterButton.h; sourceTree = "<group>"; };
@@ -170,7 +171,6 @@
 		AB67F5B816EE99B2005A04F6 /* BKRReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKRReachability.h; sourceTree = "<group>"; };
 		AB67F5B916EE99B2005A04F6 /* BKRReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKRReachability.m; sourceTree = "<group>"; };
 		AB67F5BB16EE9B79005A04F6 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		ABABF1A51646C04D00A75E67 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		ABADF3F716C7BAD900F52F3C /* NSURL+BakerExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+BakerExtensions.h"; sourceTree = "<group>"; };
 		ABADF3F816C7BAD900F52F3C /* NSURL+BakerExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+BakerExtensions.m"; sourceTree = "<group>"; };
 		ABAFB58715AB9A2E002FA498 /* Baker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Baker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -241,7 +241,6 @@
 				73040CC41B6FF77C00D0D213 /* Accounts.framework in Frameworks */,
 				73040CC21B6FF77600D0D213 /* Social.framework in Frameworks */,
 				AB67F5BC16EE9B79005A04F6 /* SystemConfiguration.framework in Frameworks */,
-				ABABF1A81646C06100A75E67 /* StoreKit.framework in Frameworks */,
 				73040CC01B6FF49900D0D213 /* Security.framework in Frameworks */,
 				73040CBE1B6FF48000D0D213 /* CFNetwork.framework in Frameworks */,
 				73040CBC1B6FF47B00D0D213 /* AudioToolbox.framework in Frameworks */,
@@ -260,6 +259,7 @@
 				AB40048115B4B90200D87E2A /* MessageUI.framework in Frameworks */,
 				AB40048315B4B90A00D87E2A /* libz.dylib in Frameworks */,
 				1516E9A82269F7D283B594FD /* libPods.a in Frameworks */,
+				73DBC11C1B8CA18D009AED5B /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,6 +450,7 @@
 		ABAFB58A15AB9A2E002FA498 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				73DBC11B1B8CA18D009AED5B /* StoreKit.framework */,
 				73040CC31B6FF77C00D0D213 /* Accounts.framework */,
 				73040CC11B6FF77600D0D213 /* Social.framework */,
 				73040CBF1B6FF49900D0D213 /* Security.framework */,
@@ -461,10 +462,7 @@
 				73040CAB1B6FF34300D0D213 /* ADMag.framework */,
 				7357EC741B6AACF600ECF8D2 /* AdSupport.framework */,
 				7357EC721B6AACF100ECF8D2 /* libsqlite3.dylib */,
-				7357EC761B6BFC9900ECF8D2 /* ADMag.bundle */,
-				7357EC6F1B6AAC6E00ECF8D2 /* ADMag.framework */,
 				AB67F5BB16EE9B79005A04F6 /* SystemConfiguration.framework */,
-				ABABF1A51646C04D00A75E67 /* StoreKit.framework */,
 				ABD245521639E3650080F056 /* AVFoundation.framework */,
 				AB5D48CD1609176A00828D16 /* NewsstandKit.framework */,
 				ABAFB58B15AB9A2E002FA498 /* UIKit.framework */,
@@ -549,6 +547,16 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0630;
+				TargetAttributes = {
+					ABAFB58615AB9A2E002FA498 = {
+						DevelopmentTeam = 73M62SS2AR;
+						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+						};
+					};
+				};
 			};
 			buildConfigurationList = ABAFB58115AB9A2E002FA498 /* Build configuration list for PBXProject "Baker" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -772,6 +780,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -793,6 +802,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="aLp-95-8Dx">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="aLp-95-8Dx">
     <dependencies>
         <deployment version="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
@@ -14,7 +14,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="c43-Sg-Lvs">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.73725490199999999" green="0.14117647059999999" blue="0.1647058824" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -55,7 +55,7 @@
                                                     <subviews>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NUq-8P-M2h" userLabel="issueCover">
                                                             <rect key="frame" x="0.0" y="0.0" width="98" height="131"/>
-                                                            <color key="backgroundColor" red="0.73725490199999999" green="0.14117647059999999" blue="0.1647058824" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" secondItem="NUq-8P-M2h" secondAttribute="height" multiplier="0.75" id="AAZ-p4-Xc7"/>
                                                             </constraints>
@@ -139,7 +139,7 @@
                                                             <subviews>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vCd-Cn-tIu" userLabel="actionButton">
                                                                     <rect key="frame" x="0.0" y="0.0" width="81" height="28"/>
-                                                                    <color key="backgroundColor" red="0.73725490199999999" green="0.14117647059999999" blue="0.1647058824" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                     <inset key="contentEdgeInsets" minX="10" minY="6" maxX="10" maxY="6"/>
                                                                     <state key="normal" title="Download">
@@ -151,7 +151,7 @@
                                                                 </button>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BcE-rb-vTh" userLabel="archiveButton">
                                                                     <rect key="frame" x="89" y="0.0" width="65" height="28"/>
-                                                                    <color key="backgroundColor" red="0.73725490199999999" green="0.14117647059999999" blue="0.1647058824" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                     <inset key="contentEdgeInsets" minX="10" minY="6" maxX="10" maxY="6"/>
                                                                     <state key="normal" title="Archive">
@@ -245,7 +245,7 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kl1-0f-BuX" userLabel="refreshButton">
                                         <rect key="frame" x="32" y="5" width="94" height="24"/>
-                                        <color key="tintColor" red="0.73725490199999999" green="0.14117647059999999" blue="0.1647058824" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Subscribe" image="icon-subscribe.png"/>
                                         <connections>
                                             <action selector="handleSubscribeButtonPressed:" destination="uVi-WJ-MxP" eventType="touchUpInside" id="vra-Ot-WAb"/>
@@ -253,7 +253,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kUf-b8-2Bb" userLabel="subscribeButton">
                                         <rect key="frame" x="0.0" y="5" width="24" height="24"/>
-                                        <color key="tintColor" red="0.73725490199999999" green="0.14117647059999999" blue="0.1647058824" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" image="icon-refresh.png"/>
                                         <connections>
                                             <action selector="handleRefresh:" destination="uVi-WJ-MxP" eventType="touchUpInside" id="UUh-Go-0Gb"/>
@@ -275,15 +275,17 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lhu-de-FDG" userLabel="infoButton">
                                         <rect key="frame" x="109" y="5" width="24" height="24"/>
-                                        <color key="tintColor" red="0.73725490199999999" green="0.14117647059999999" blue="0.1647058824" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" image="icon-info.png"/>
                                         <connections>
                                             <action selector="handleInfoButtonPressed:" destination="uVi-WJ-MxP" eventType="touchUpInside" id="NNI-Se-F5S"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dx5-DW-bsp" userLabel="categoriesButton" customClass="BKRCategoryFilterButton">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dx5-DW-bsp" userLabel="categoriesButton" customClass="BKRCategoryFilterButton" colorLabel="IBBuiltInLabel-Red">
                                         <rect key="frame" x="2" y="5" width="99" height="24"/>
-                                        <color key="tintColor" red="0.73725490199999999" green="0.14117647059999999" blue="0.1647058824" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Categories" image="icon-categories.png"/>
                                     </button>
                                 </subviews>
@@ -339,7 +341,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Book" id="PXc-k8-GEf">
                         <barButtonItem key="rightBarButtonItem" systemItem="action" id="lfP-dh-xL1" userLabel="shareButton">
-                            <color key="tintColor" red="0.73725490199999999" green="0.14117647059999999" blue="0.1647058824" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="handleShareButtonPressed:" destination="bmI-S1-ul6" id="e7K-RV-dWu"/>
                             </connections>

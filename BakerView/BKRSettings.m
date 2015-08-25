@@ -71,13 +71,13 @@
             _settings = @{};
         }
         
-        NSLog(@"Settings: %@", _settings);
+        //NSLog(@"Settings: %@", _settings);
 
         _requestTimeout                      = [self doubleSettingForKey:@"requestTimeout" withDefault:15];
         _isNewsstand                         = [self boolSettingForKey:@"isNewsstand" withDefault:YES];
         _newsstandLatestIssueCover           = [self boolSettingForKey:@"newsstandLatestIssueCover" withDefault:YES];
         
-        _newsstandManifestUrl                = [self stringSettingForKey:@"newsstandManifestUrl" withDefault:@"http://localhost/banca.json"];
+        _newsstandManifestUrl                = [self stringSettingForKey:@"newsstandManifestUrl" withDefault:@"http://bakerframework.com/demo/shelf.json"];
         _purchaseConfirmationUrl             = [self stringSettingForKey:@"purchaseConfirmationUrl" withDefault:@""];
         _purchasesUrl                        = [self stringSettingForKey:@"purchasesUrl" withDefault:@""];
         _postApnsTokenUrl                    = [self stringSettingForKey:@"postApnsTokenUrl" withDefault:@""];

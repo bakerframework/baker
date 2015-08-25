@@ -9,7 +9,7 @@
 	<key>newsstandLatestIssueCover</key>
 	<true/>
 	<key>newsstandManifestUrl</key>
-	<string>http://bakerframework.com/demo/shelf.json</string>
+	<string>http://media.admag.com.br/baker_carta/html5_output/shelf.json</string>
 	<key>purchaseConfirmationUrl</key>
 	<string></string>
 	<key>purchasesUrl</key>
@@ -64,13 +64,13 @@
 	<key>issuesInfoColor</key>
 	<string>#929292</string>
 	<key>issuesPriceColor</key>
-	<string>#bc242a</string>
+	<string>#f96332</string>
 	<key>issuesActionFont</key>
 	<string>Helvetica-Bold</string>
 	<key>issuesActionFontSize</key>
 	<integer>11</integer>
 	<key>issuesActionBackgroundColor</key>
-	<string>#bc242a</string>
+	<string>#f96332</string>
 	<key>issuesActionButtonColor</key>
 	<string>#ffffff</string>
 	<key>issuesArchiveFont</key>
@@ -78,15 +78,15 @@
 	<key>issuesArchiveFontSize</key>
 	<integer>11</integer>
 	<key>issuesArchiveBackgroundColor</key>
-	<string>#bc242a</string>
+	<string>#f96332</string>
 	<key>issuesArchiveButtonColor</key>
 	<string>#ffffff</string>
 	<key>issuesLoadingLabelColor</key>
-	<string>#bc242a</string>
+	<string>#f96332</string>
 	<key>issuesLoadingSpinnerColor</key>
 	<string>#929292</string>
 	<key>issuesProgressbarTintColor</key>
-	<string>#bc242a</string>
+	<string>#f96332</string>
 	<key>showSocialShareButton</key>
 	<true/>
 	<key>admagApiKey</key>
@@ -94,10 +94,10 @@
 	<key>admagPublicationId</key>
 	<string>1</string>
 	<key>googleAnalyticsID</key>
-	<string>UA-57026936-3</string>
+	<string></string>
 	<key>parseApplicationId</key>
-	<string>7kWAGHEPB33jO1mVBqd2n1mBTFe73embCD3zLeuz</string>
+	<string></string>
 	<key>parseClientKey</key>
-	<string>MUyz9RSX1ghEKWCZBD7bsxCMRKSjqSmjCcRZCgVV</string>
+	<string></string>
 </dict>
 </plist>
