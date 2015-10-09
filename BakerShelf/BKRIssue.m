@@ -235,8 +235,9 @@
         completionBlock(image);
     } else {
         if (self.coverURL) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-                NSData *imageData = [NSData dataWithContentsOfURL:self.coverURL];
+            dispatch_queue_t coverQueue = dispatch_queue_create("Baker Cover Queue", NULL);
+             dispatch_async(coverQueue, ^(void) {
+             NSData *imageData = [NSData dataWithContentsOfURL:self.coverURL];
                 UIImage *image = [UIImage imageWithData:imageData];
                 if (image) {
                     [imageData writeToFile:self.coverPath atomically:YES];
