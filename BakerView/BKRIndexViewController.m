@@ -247,8 +247,8 @@
     return [view sizeThatFits:CGSizeZero];
      */
     
-    CGFloat contentWidth  = [[webView stringByEvaluatingJavaScriptFromString:@"document.width"] floatValue];
-    CGFloat contentHeight = [[webView stringByEvaluatingJavaScriptFromString:@"document.height"] floatValue];
+    CGFloat contentWidth  = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.scrollWidth"] floatValue];
+    CGFloat contentHeight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.scrollHeight"] floatValue];
     return CGSizeMake(contentWidth, contentHeight);
 }
 
