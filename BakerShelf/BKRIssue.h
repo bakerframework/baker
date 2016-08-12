@@ -37,17 +37,21 @@
 
 #import "BKRBook.h"
 
-typedef enum transientStates {
-    BakerIssueTransientStatusNone,
-    BakerIssueTransientStatusDownloading,
-    BakerIssueTransientStatusOpening,
-    BakerIssueTransientStatusPurchasing,
-    BakerIssueTransientStatusUnpriced
-} BakerIssueTransientStatus;
+typedef enum issueStates {
+    BakerIssueStatusNone,
+    BakerIssueStatusDownloading,
+    BakerIssueStatusOpening,
+    BakerIssueStatusPurchasing,
+    BakerIssueStatusUnpriced
+} BakerIssueStatus;
+
+@protocol BKRIssueDelegate;
 
 @interface BKRIssue : NSObject <NSURLConnectionDownloadDelegate> {
     BKRPurchasesManager *purchasesManager;
 }
+
+@property (nonatomic, weak) id<BKRIssueDelegate> delegate;
 
 @property (nonatomic, copy) NSString *ID;
 @property (nonatomic, copy) NSString *title;
@@ -56,22 +60,22 @@ typedef enum transientStates {
 @property (nonatomic, copy) NSURL *url;
 @property (nonatomic, copy) NSString *path;
 @property (nonatomic, copy) NSArray *categories;
-
 @property (nonatomic, copy) NSString *coverPath;
 @property (nonatomic, copy) NSURL *coverURL;
-
 @property (nonatomic, copy) NSString *productID;
 @property (nonatomic, copy) NSString *price;
 
 @property (nonatomic, strong) BKRBook *bakerBook;
 
-@property (nonatomic, assign) BakerIssueTransientStatus transientStatus;
+@property (nonatomic, assign) BakerIssueStatus status;
 
 @property (nonatomic, copy) NSString *notificationDownloadStartedName;
 @property (nonatomic, copy) NSString *notificationDownloadProgressingName;
 @property (nonatomic, copy) NSString *notificationDownloadFinishedName;
 @property (nonatomic, copy) NSString *notificationDownloadErrorName;
 @property (nonatomic, copy) NSString *notificationUnzipErrorName;
+
+@property (nonatomic, assign) BOOL purchaseDelayed;
 
 - (id)initWithBakerBook:(BKRBook*)bakerBook;
 - (void)getCoverWithCache:(bool)cache andBlock:(void(^)(UIImage *img))completionBlock;
@@ -80,5 +84,18 @@ typedef enum transientStates {
 - (id)initWithIssueData:(NSDictionary*)issueData;
 - (void)download;
 - (void)downloadWithAsset:(NKAssetDownload*)asset;
+- (void)dataChanged;
+
+@end
+
+
+@protocol BKRIssueDelegate <NSObject>
+
+- (void)issue:(BKRIssue *)issue downloadStarted:(NSDictionary *)userInfo;
+- (void)issue:(BKRIssue *)issue downloadProgressing:(NSDictionary *)userInfo;
+- (void)issue:(BKRIssue *)issue downloadFinished:(NSDictionary *)userInfo;
+- (void)issue:(BKRIssue *)issue downloadError:(NSDictionary *)userInfo;
+- (void)issue:(BKRIssue *)issue unzipError:(NSDictionary *)userInfo;
+- (void)issue:(BKRIssue *)issue dataChanged:(NSDictionary *)userInfo;
 
 @end

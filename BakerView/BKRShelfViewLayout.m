@@ -7,11 +7,20 @@
 //
 
 #import "BKRShelfViewLayout.h"
+#import "BKRSettings.h"
 
 @implementation BKRShelfViewLayout
 
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        _isSticky = [[BKRSettings sharedSettings].issuesShelfOptions[@"headerSticky"] boolValue];
+        _isStretch = [[BKRSettings sharedSettings].issuesShelfOptions[@"headerStretch"] boolValue];
+    }
+    return self;
+}
+
 - (id)initWithSticky:(BOOL)sticky stretch:(BOOL)stretch {
-    
     self = [super init];
     if (self) {
         _isSticky = sticky;

@@ -53,115 +53,108 @@
 @implementation BKRBookViewController
 
 #pragma mark - INIT
-- (id)initWithBook:(BKRBook *)bakerBook {
 
+- (id)initWithIssue:(BKRIssue *)issue {
     self = [super init];
     if (self) {
-        NSLog(@"[BakerView] Init book view...");
-        
-        _book = bakerBook;
-
-        if ([self respondsToSelector:@selector(automaticallyAdjustsScrollViewInsets)]) {
-            // Only available in iOS 7 +
-            self.automaticallyAdjustsScrollViewInsets = NO;
-        }
-
-        // ****** DEVICE SCREEN BOUNDS
-        screenBounds = [[UIScreen mainScreen] bounds];
-        NSLog(@"[BakerView]     Device Screen (WxH): %fx%f.", screenBounds.size.width, screenBounds.size.height);
-
-        // ****** SUPPORTED ORIENTATION FROM PLIST
-        supportedOrientation = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UISupportedInterfaceOrientations"];
-
-        if (![[NSFileManager defaultManager] fileExistsAtPath:self.bkrCachePath]) {
-            [[NSFileManager defaultManager] createDirectoryAtPath:self.bkrCachePath withIntermediateDirectories:YES attributes:nil error:nil];
-        }
-
-        // ****** SCREENSHOTS DIRECTORY //TODO: set in load book only if is necessary
-        defaultScreeshotsPath = [[self.bkrCachePath stringByAppendingPathComponent:@"screenshots"] stringByAppendingPathComponent:bakerBook.ID];
-
-        // ****** STATUS FILE
-        bookStatus = [[BKRBookStatus alloc] initWithBookId:bakerBook.ID];
-        NSLog(@"[BakerView]     Status: page %@ @ scrollIndex %@px.", bookStatus.page, bookStatus.scrollIndex);
-
-        // ****** Initialize audio session for html5 audio
-        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        BOOL ok;
-        NSError *setCategoryError = nil;
-        ok = [audioSession setCategory:AVAudioSessionCategoryPlayback
-                                 error:&setCategoryError];
-        if (!ok) {
-            NSLog(@"[BakerView]     AudioSession - %s setCategoryError=%@", __PRETTY_FUNCTION__, setCategoryError);
-        }
-
-        // ****** BOOK ENVIRONMENT
-        pages  = [NSMutableArray array];
-        toLoad = [NSMutableArray array];
-
-        pageDetails = [NSMutableArray array];
-
-        attachedScreenshotPortrait  = [NSMutableDictionary dictionary];
-        attachedScreenshotLandscape = [NSMutableDictionary dictionary];
-
-        tapNumber = 0;
-        stackedScrollingAnimations = 0; // TODO: CHECK IF STILL USED!
-
-        currentPageFirstLoading = YES;
-        currentPageIsDelayingLoading = YES;
-        currentPageHasChanged = NO;
-        currentPageIsLocked = NO;
-        currentPageWillAppearUnderModal = NO;
-
-        userIsScrolling = NO;
-        shouldPropagateInterceptedTouch = YES;
-        shouldForceOrientationUpdate = YES;
-
-        adjustViewsOnAppDidBecomeActive = NO;
-        _barsHidden = NO;
-
-        webViewBackground = nil;
-
-        pageNameFromURL = nil;
-        anchorFromURL = nil;
-
-        // TODO: LOAD BOOK METHOD IN VIEW DID LOAD
-        [self loadBookWithBookPath:bakerBook.path];
+        [self configureWithIssue:issue];
     }
     return self;
 }
+
+- (void)configureWithIssue:(BKRIssue *)issue {
+    self.issue = issue;
+    if ([BKRSettings sharedSettings].isNewsstand) {
+        self.book = [[BKRBook alloc] initWithBookPath:issue.path bundled:NO];
+    } else {
+        self.book = [issue bakerBook];
+    }
+    NSLog(@"[BakerView] Init book view...");
+    
+    if ([self respondsToSelector:@selector(automaticallyAdjustsScrollViewInsets)]) {
+        // Only available in iOS 7 +
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
+    
+    // ****** DEVICE SCREEN BOUNDS
+    screenBounds = [[UIScreen mainScreen] bounds];
+    NSLog(@"[BakerView]     Device Screen (WxH): %fx%f.", screenBounds.size.width, screenBounds.size.height);
+    
+    // ****** SUPPORTED ORIENTATION FROM PLIST
+    supportedOrientation = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UISupportedInterfaceOrientations"];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:self.bkrCachePath]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:self.bkrCachePath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    
+    // ****** SCREENSHOTS DIRECTORY //TODO: set in load book only if is necessary
+    defaultScreeshotsPath = [[self.bkrCachePath stringByAppendingPathComponent:@"screenshots"] stringByAppendingPathComponent:_book.ID];
+    
+    // ****** STATUS FILE
+    bookStatus = [[BKRBookStatus alloc] initWithBookId:_book.ID];
+    NSLog(@"[BakerView]     Status: page %@ @ scrollIndex %@px.", bookStatus.page, bookStatus.scrollIndex);
+    
+    // ****** Initialize audio session for html5 audio
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    BOOL ok;
+    NSError *setCategoryError = nil;
+    ok = [audioSession setCategory:AVAudioSessionCategoryPlayback
+                             error:&setCategoryError];
+    if (!ok) {
+        NSLog(@"[BakerView]     AudioSession - %s setCategoryError=%@", __PRETTY_FUNCTION__, setCategoryError);
+    }
+    
+    // ****** BOOK ENVIRONMENT
+    pages  = [NSMutableArray array];
+    toLoad = [NSMutableArray array];
+    
+    pageDetails = [NSMutableArray array];
+    
+    attachedScreenshotPortrait  = [NSMutableDictionary dictionary];
+    attachedScreenshotLandscape = [NSMutableDictionary dictionary];
+    
+    tapNumber = 0;
+    stackedScrollingAnimations = 0; // TODO: CHECK IF STILL USED!
+    
+    currentPageFirstLoading = YES;
+    currentPageIsDelayingLoading = YES;
+    currentPageHasChanged = NO;
+    currentPageIsLocked = NO;
+    currentPageWillAppearUnderModal = NO;
+    
+    userIsScrolling = NO;
+    shouldPropagateInterceptedTouch = YES;
+    shouldForceOrientationUpdate = YES;
+    
+    adjustViewsOnAppDidBecomeActive = NO;
+    _barsHidden = NO;
+    
+    webViewBackground = nil;
+    
+    pageNameFromURL = nil;
+    anchorFromURL = nil;
+    
+    // TODO: LOAD BOOK METHOD IN VIEW DID LOAD
+    [self loadBookWithBookPath:_book.path];
+}
+
 - (void)viewDidLoad {
 
     [super viewDidLoad];
     self.navigationItem.title = self.book.title;
-    
     
     // ****** SET THE INITIAL SIZE FOR EVERYTHING
     // Avoids strange animations when opening
     [self setPageSize:[self getCurrentInterfaceOrientation:self.interfaceOrientation]];
 
     // SOCIAL MEDIA INTEGRATION - START
-    if ([BKRSettings sharedSettings].showSocialShareButton) {
-        self.shareButton = [[UIBarButtonItem alloc]
-                            initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-                            target:self
-                            action:@selector(shareBtnAction:)];
-        self.navigationItem.rightBarButtonItem = self.shareButton;
+    if (![BKRSettings sharedSettings].showSocialShareButton) {
+        [self.navigationItem setRightBarButtonItem:nil];
     }
     // SOCIAL MEDIA INTEGRATION - END
     
-    // ****** SCROLLVIEW INIT
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, pageWidth, pageHeight)];
-    self.scrollView.showsHorizontalScrollIndicator = YES;
-    self.scrollView.showsVerticalScrollIndicator   = NO;
-    self.scrollView.delaysContentTouches           = NO;
-    self.scrollView.pagingEnabled                  = YES;
-    self.scrollView.delegate                       = self;
-
     self.scrollView.scrollEnabled   = [self.book.bakerPageTurnSwipe boolValue];
     self.scrollView.backgroundColor = [BKRUtils colorWithHexString:self.book.bakerBackground];
-
-    [self.view addSubview:self.scrollView];
-
 
     // ****** BAKER BACKGROUND
     backgroundImageLandscape   = nil;
@@ -243,10 +236,7 @@
     return newImage;
 }
 
-
-
-- (void) shareBtnAction:(UIButton *)sender {
-    
+- (IBAction)handleShareButtonPressed:(id)sender {
     if (![self checkScreeshotForPage:_currentPageNumber andOrientation:[self getCurrentInterfaceOrientation:self.interfaceOrientation]]) {
         [self takeScreenshotFromView:_currPage forPage:_currentPageNumber andOrientation:[self getCurrentInterfaceOrientation:self.interfaceOrientation]];
     }
@@ -1929,6 +1919,7 @@
         // Baker book is disappearing because it was popped from the navigation stack -> Baker book is closing
         [[NSNotificationCenter defaultCenter] postNotificationName:@"BakerIssueClose" object:self]; // -> Baker Analytics Event
         [self saveBookStatusWithScrollIndex];
+        self.issue.status = BakerIssueStatusNone;
     }
 }
 - (void)saveBookStatusWithScrollIndex {

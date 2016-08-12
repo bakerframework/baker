@@ -1,11 +1,12 @@
 //
-//  IssueViewController.h
+//  BKRIssueCell.h
 //  Baker
 //
 //  ==========================================================================================
 //
 //  Copyright (c) 2010-2013, Davide Casali, Marco Colombo, Alessandro Morandi
 //  Copyright (c) 2014, Andrew Krowczyk, Cédric Mériau, Pieter Claerhout
+//  Copyright (c) 2015, Andrew Krowczyk, Cédric Mériau, Pieter Claerhout, Tobias Strebitzer
 //  All rights reserved.
 //
 //  Redistribution and use in source and binary forms, with or without modification, are
@@ -30,64 +31,41 @@
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import <UIKit/UIKit.h>
 #import "BKRIssue.h"
-#import "BKRPurchasesManager.h"
 
-@interface BKRIssueViewController : UIViewController {
-    NSString *currentAction;
-    BOOL purchaseDelayed;
-    BKRPurchasesManager *purchasesManager;
-}
+@protocol BKRIssueCellDelegate;
+
+@interface BKRIssueCell : UICollectionViewCell<BKRIssueDelegate>
+
+@property (nonatomic, weak) IBOutlet id<BKRIssueCellDelegate> delegate;
+
+@property (nonatomic, strong) IBOutlet UIButton *actionButton;
+@property (nonatomic, strong) IBOutlet UIButton *archiveButton;
+@property (nonatomic, strong) IBOutlet UIProgressView *progressBar;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *spinner;
+@property (nonatomic, strong) IBOutlet UILabel *loadingLabel;
+
+@property (nonatomic, strong) IBOutlet UIButton *issueCover;
+@property (nonatomic, strong) IBOutlet UILabel *titleLabel;
+@property (nonatomic, strong) IBOutlet UILabel *infoLabel;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *issueCoverRatioConstraint;
 
 @property (nonatomic, strong) BKRIssue *issue;
-@property (nonatomic, strong) UIButton *actionButton;
-@property (nonatomic, strong) UIButton *archiveButton;
-@property (nonatomic, strong) UIProgressView *progressBar;
-@property (nonatomic, strong) UIActivityIndicatorView *spinner;
-@property (nonatomic, strong) UILabel *loadingLabel;
-
-@property (nonatomic, strong) UIButton *issueCover;
-@property (nonatomic, strong) UILabel *titleLabel;
-@property (nonatomic, strong) UILabel *infoLabel;
-
-@property (nonatomic, copy) NSString *currentStatus;
-
-#pragma mark - Structs
-typedef struct {
-    int cellPadding;
-    int thumbWidth;
-    int thumbHeight;
-    int contentOffset;
-} UI;
-
-#pragma mark - Init
-- (id)initWithBakerIssue:(BKRIssue*)bakerIssue;
-
-#pragma mark - View Lifecycle
-- (void)refresh;
-- (void)refresh:(NSString*)status;
-- (void)refresh:(NSString*)status cache:(BOOL)cache;
-- (void)refreshWithCache:(BOOL)cache;
-- (void)refreshContentWithCache:(bool)cache;
-- (void)preferredContentSizeChanged:(NSNotification*)notification;
 
 #pragma mark - Issue management
-- (void)actionButtonPressed:(UIButton*)sender;
-- (void)download;
-- (void)setPrice:(NSString*)price;
-- (void)buy;
-- (void)read;
+- (IBAction)actionButtonPressed:(id)sender;
+- (IBAction)archiveButtonPressed:(id)sender;
 
-#pragma mark - Newsstand archive management
-- (void)archiveButtonPressed:(UIButton*)sender;
-
-#pragma mark - Helper methods
-+ (UI)getIssueContentMeasures;
-+ (int)getIssueCellHeight;
-+ (CGSize)getIssueCellSizeForOrientation:(UIInterfaceOrientation)orientation;
+#pragma mark - View management
+- (void)updateView;
 
 @end
 
-@interface alertView: UIAlertView <UIActionSheetDelegate>
+@protocol BKRIssueCellDelegate <NSObject>
+
+- (void)issueCell:(BKRIssueCell *)cell requestsReadActionForIssue:(BKRIssue *)issue;
+- (void)issueCell:(BKRIssueCell *)cell requestsPurchaseActionForIssue:(BKRIssue *)issue;
+- (void)issueCell:(BKRIssueCell *)cell requestsDownloadActionForIssue:(BKRIssue *)issue;
+- (void)issueCell:(BKRIssueCell *)cell requestsArchiveActionForIssue:(BKRIssue *)issue;
+
 @end

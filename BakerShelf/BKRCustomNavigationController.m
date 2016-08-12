@@ -43,4 +43,26 @@
     return [self.topViewController shouldAutorotate];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self updateTitleForOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [self updateTitleForOrientation:toInterfaceOrientation];
+}
+
+- (void)updateTitleForOrientation:(UIInterfaceOrientation)orientation {
+    if(!self.originalTitleColor) {
+        NSDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes;
+        self.originalTitleColor = [titleTextAttributes objectForKey:@"TextColor"];
+    }
+    if(UIInterfaceOrientationIsPortrait(orientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        [self.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor clearColor], NSForegroundColorAttributeName, nil]];
+    }else{
+        [self.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.originalTitleColor, NSForegroundColorAttributeName, nil]];
+    }
+}
+
 @end

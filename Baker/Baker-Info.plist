@@ -43,6 +43,8 @@
 		<string>newsstand-content</string>
 		<string>remote-notification</string>
 	</array>
+	<key>UIMainStoryboardFile</key>
+	<string>BKRStoryboard</string>
 	<key>UINewsstandApp</key>
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>
