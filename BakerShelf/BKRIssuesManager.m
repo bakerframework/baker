@@ -218,6 +218,24 @@
     return self.issues[0];
 }
 
+- (BKRIssue*)issueWithProductId:(NSString *)productId {
+    for (BKRIssue *issue in self.issues) {
+        if ([issue.productID isEqualToString:productId]) {
+            return issue;
+        }
+    }
+    return nil;
+}
+
+- (BKRIssue*)issueWithId:(NSString *)issueId {
+    for (BKRIssue *issue in self.issues) {
+        if ([issue.ID isEqualToString:issueId]) {
+            return issue;
+        }
+    }
+    return nil;
+}
+
 + (NSArray*)localBooksList {
     NSMutableArray *booksList       = [NSMutableArray array];
     NSFileManager *localFileManager = [NSFileManager defaultManager];

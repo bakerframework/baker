@@ -1,103 +1,99 @@
-
-// Shelf Navigation Title at the top of the main Issues List
-"SHELF_NAVIGATION_TITLE" = "Baker Shelf";
-
 // Products alert
-"PRODUCTS_REQUEST_FAILED_TITLE" = "Failure connecting to the App Store";
-"PRODUCTS_REQUEST_FAILED_CLOSE" = "Close";
+"PRODUCTS_REQUEST_FAILED_TITLE" = "Falha ao conectar a App Store";
+"PRODUCTS_REQUEST_FAILED_CLOSE" = "Fechar";
 
 // Info button
 "INFO_BUTTON_TEXT" = "Info";
 
 // Subscription button
-"SUBSCRIBE_BUTTON_TEXT" = "Subscribe";
-"SUBSCRIBE_BUTTON_DISABLED_TEXT" = "Subscribing...";
-"SUBSCRIBE_BUTTON_SUBSCRIBED_TEXT" = "Subscribed";
+"SUBSCRIBE_BUTTON_TEXT" = "Assinar";
+"SUBSCRIBE_BUTTON_DISABLED_TEXT" = "Assinando...";
+"SUBSCRIBE_BUTTON_SUBSCRIBED_TEXT" = "Assinado com sucesso";
 
-"SUBSCRIPTIONS_SHEET_FREE" = "Subscribe for free";
-"SUBSCRIPTIONS_SHEET_RESTORE" = "Restore purchases";
-"SUBSCRIPTIONS_SHEET_CLOSE" = "Close";
+"SUBSCRIPTIONS_SHEET_FREE" = "Assinar grátis";
+"SUBSCRIPTIONS_SHEET_RESTORE" = "Restaurar compras";
+"SUBSCRIPTIONS_SHEET_CLOSE" = "Fechar";
 
-"SUBSCRIPTIONS_SHEET_GENERIC" = "Subscription options";
-"SUBSCRIPTIONS_SHEET_SUBSCRIBED" = "You are subscribed";
-"SUBSCRIPTIONS_SHEET_NOT_SUBSCRIBED" = "You are not subscribed";
+"SUBSCRIPTIONS_SHEET_GENERIC" = "Opções de assinatura";
+"SUBSCRIPTIONS_SHEET_SUBSCRIBED" = "Você está assinando";
+"SUBSCRIPTIONS_SHEET_NOT_SUBSCRIBED" = "Você não está assinando";
 
 // Subscription alerts
-"SUBSCRIPTION_SUCCESSFUL_TITLE" = "Subscribed successfully";
-"SUBSCRIPTION_SUCCESSFUL_MESSAGE" = "You have successfully subscribed";
-"SUBSCRIPTION_SUCCESSFUL_CLOSE" = "Close";
-"SUBSCRIPTION_FAILED_TITLE" = "Subscription failure";
-"SUBSCRIPTION_FAILED_CLOSE" = "Close";
+"SUBSCRIPTION_SUCCESSFUL_TITLE" = "Assinado com sucesso";
+"SUBSCRIPTION_SUCCESSFUL_MESSAGE" = "Assinado com sucesso";
+"SUBSCRIPTION_SUCCESSFUL_CLOSE" = "Fechar";
+"SUBSCRIPTION_FAILED_TITLE" = "Falha na assinatura";
+"SUBSCRIPTION_FAILED_CLOSE" = "Fechar";
 
 // Issue purchase alerts
-"ISSUE_PURCHASE_SUCCESSFUL_TITLE" = "Purchase successful";
-"ISSUE_PURCHASE_SUCCESSFUL_MESSAGE" = "You have successfully purchased %@";
-"ISSUE_PURCHASE_SUCCESSFUL_CLOSE" = "Close";
-"ISSUE_PURCHASE_FAILED_TITLE" = "Purchase failure";
-"ISSUE_PURCHASE_FAILED_CLOSE" = "Close";
+"ISSUE_PURCHASE_SUCCESSFUL_TITLE" = "Edição comprada com sucesso";
+"ISSUE_PURCHASE_SUCCESSFUL_MESSAGE" = "Você comprou %@ com sucesso";
+"ISSUE_PURCHASE_SUCCESSFUL_CLOSE" = "Fechar";
+"ISSUE_PURCHASE_FAILED_TITLE" = "Falha na comprar";
+"ISSUE_PURCHASE_FAILED_CLOSE" = "Fechar";
 
 // Restore alerts
-"RESTORE_FAILED_TITLE" = "Restore failure";
-"RESTORE_FAILED_CLOSE" = "Close";
+"RESTORE_FAILED_TITLE" = "Falha ao restaurar";
+"RESTORE_FAILED_CLOSE" = "Fechar";
 
 "RESTORED_ISSUE_NOT_RECOGNISED_TITLE" = "Some issues could not be restored";
 "RESTORED_ISSUE_NOT_RECOGNISED_MESSAGE" = "The following product IDs are not defined and the corresponding issues could not be restored:\n%@.\n\nContact the app creator for more info.";
-"RESTORED_ISSUE_NOT_RECOGNISED_CLOSE" = "Close";
+"RESTORED_ISSUE_NOT_RECOGNISED_CLOSE" = "Fechar";
 
 // Download alert
-"DOWNLOAD_FAILED_TITLE" = "Download failed";
-"DOWNLOAD_FAILED_MESSAGE" = "The issue could not be downloaded";
-"DOWNLOAD_FAILED_CLOSE" = "Close";
+"DOWNLOAD_FAILED_TITLE" = "Falha ao baixar edição";
+"DOWNLOAD_FAILED_MESSAGE" = "A edição não pode ser baixada neste momento. Tente novamente mais tarde";
+"DOWNLOAD_FAILED_CLOSE" = "Fechar";
 
 // Unzip alert
-"UNZIP_FAILED_TITLE" = "Opening failed";
-"UNZIP_FAILED_MESSAGE" = "The issue could not be opened";
-"UNZIP_FAILED_CLOSE" = "Close";
+"UNZIP_FAILED_TITLE" = "Falha ao abrir zip";
+"UNZIP_FAILED_MESSAGE" = "Falha ao abrir edição";
+"UNZIP_FAILED_CLOSE" = "Fechar";
 
 // Connection alert
-"INTERNET_CONNECTION_UNAVAILABLE_TITLE" = "No Internet Connection";
-"INTERNET_CONNECTION_UNAVAILABLE_MESSAGE" = "An Internet connection is unavailable. Some features of this application require an active connection.";
+"INTERNET_CONNECTION_UNAVAILABLE_TITLE" = "Sem conexão";
+"INTERNET_CONNECTION_UNAVAILABLE_MESSAGE" = "Conexão indisponível. Some features of this application require an active connection.";
 "INTERNET_CONNECTION_UNAVAILABLE_CLOSE" = "OK";
 
 // Issue buttons
-"ACTION_REMOTE_TEXT" = "DOWNLOAD";
-"ACTION_DOWNLOADED_TEXT" = "READ";
-"ACTION_BUY_TEXT" = "BUY";
-"ARCHIVE_TEXT" = "ARCHIVE";
-"CONNECTING_TEXT" = "CONNECTING...";
-"DOWNLOADING_TEXT" = "DOWNLOADING ...";
-"OPENING_TEXT" = "Loading...";
-"BUYING_TEXT" = "BUYING...";
-"RETRIEVING_TEXT" = "UPDATING PRICE...";
+"ACTION_REMOTE_TEXT" = "Baixar";
+"ACTION_DOWNLOADED_TEXT" = "Abrir";
+"ACTION_BUY_TEXT" = "Comprar";
+"ARCHIVE_TEXT" = "Excluir";
+"CONNECTING_TEXT" = "Conectando...";
+"DOWNLOADING_TEXT" = "Baixando ...";
+"OPENING_TEXT" = "Carregando...";
+"BUYING_TEXT" = "Compando...";
+"RETRIEVING_TEXT" = "Carregando preços...";
 
 // Issue states
-"FREE_TEXT" = "FREE";
-"PURCHASED_TEXT" = "PURCHASED";
+"FREE_TEXT" = "Grátis";
+"PURCHASED_TEXT" = "Comprado";
 
 // Archiving alert
-"ARCHIVE_ALERT_TITLE" = "Are you sure you want to archive this issue?";
-"ARCHIVE_ALERT_MESSAGE" = "This issue will be removed from your device. You may download it at anytime for free.";
-"ARCHIVE_ALERT_BUTTON_CANCEL" = "Cancel";
-"ARCHIVE_ALERT_BUTTON_OK" = "Archive";
+"ARCHIVE_ALERT_TITLE" = "Você tem certeza que deseja excluir esta edição?";
+"ARCHIVE_ALERT_MESSAGE" = "Esta edição será removida deste dispositivo. Você poderá baixar gratuitamente a qualquer momento.";
+"ARCHIVE_ALERT_BUTTON_CANCEL" = "Cancelar";
+"ARCHIVE_ALERT_BUTTON_OK" = "Excluir";
 
 // Mail alert
-"MAILTO_ALERT_TITLE" = "Failure";
+"MAILTO_ALERT_TITLE" = "Falhou";
 "MAILTO_ALERT_MESSAGE" = "Your device doesn't support the sending of emails!";
 "MAILTO_ALERT_CLOSE" = "OK";
 
 // Modal web view
-"WEB_MODAL_FAILURE_MESSAGE" = "Unable to connect.";
-"WEB_MODAL_CLOSE_BUTTON_TEXT" = "Back";
+"WEB_MODAL_FAILURE_MESSAGE" = "Falha de conexão.";
+"WEB_MODAL_CLOSE_BUTTON_TEXT" = "Voltar";
 
 // Transaction recording alert
 "TRANSACTION_RECORDING_FAILED_TITLE" = "Could not confirm purchase with remote server";
 "TRANSACTION_RECORDING_FAILED_MESSAGE" = "The operation will be retried until it is successful";
-"TRANSACTION_RECORDING_FAILED_CLOSE" = "Close";
+"TRANSACTION_RECORDING_FAILED_CLOSE" = "Fechar";
 
 // Issue opening failure alert
-"ISSUE_OPENING_FAILED_TITLE" = "Could not open issue";
+"ISSUE_OPENING_FAILED_TITLE" = "Não foi possível abrir esta edição";
 "ISSUE_OPENING_FAILED_MESSAGE" = "There was an error opening this issue. Try downloading it again or contact the publisher.";
-"ISSUE_OPENING_FAILED_CLOSE" = "Close";
+"ISSUE_OPENING_FAILED_CLOSE" = "Fechar";
 
 // Subscriptions
 // (These are just examples: you'll need to provide your own product IDs and names)
@@ -105,9 +101,9 @@
 //"com.example.MyBook.subscription.6months" = "Half Year Subscription";
 
 // Categories
-"ALL_CATEGORIES_TITLE" = "All Categories";
+"ALL_CATEGORIES_TITLE" = "Todas categorias";
 
 //Social share button
 //Im' reading the ISSUE_NAME from APPNAME. Checkit at BOOK.URL 
-"SOCIAL_SHARE_BUTTON_MESSAGE" = "I'm reading \"%@\" from \"%@\". Check it at %@";
+"SOCIAL_SHARE_BUTTON_MESSAGE" = "Estou lendo \"%@\" em \"%@\". Baixe em %@";
 

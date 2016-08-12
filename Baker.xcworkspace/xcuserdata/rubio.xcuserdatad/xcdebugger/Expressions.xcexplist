@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "-[BKRBookViewController buildPageArray]:BKRBookViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[BKRShelfViewController issueCell:requestsArchiveActionForIssue:]:BKRShelfViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[ADMagWebView webView:shouldStartLoadWithRequest:navigationType:]:ADMagWebView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "request.URL">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[BKRBookViewController scrollViewDidEndDecelerating:]:BKRBookViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.currentPageNumber">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

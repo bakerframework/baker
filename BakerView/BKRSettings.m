@@ -71,7 +71,7 @@
             _settings = @{};
         }
         
-        NSLog(@"Settings: %@", _settings);
+        //NSLog(@"Settings: %@", _settings);
 
         _requestTimeout                      = [self doubleSettingForKey:@"requestTimeout" withDefault:15];
         _isNewsstand                         = [self boolSettingForKey:@"isNewsstand" withDefault:YES];
@@ -115,7 +115,20 @@
         
         _issuesShelfOptions                  = [self dictionarySettingForKey:@"issuesShelfOptions" withDefault:@{}];
         _showSocialShareButton               = [self boolSettingForKey:@"showSocialShareButton" withDefault:NO];
-    
+        
+        //ADMAG Ads
+        _admagApiKey                         = [self stringSettingForKey:@"admagApiKey"
+            withDefault:@""];
+        _admagPublicationId                  = [self numberSettingForKey:@"admagPublicationId"
+            withDefault:0];
+        _googleAnalyticsID                   = [self stringSettingForKey:@"googleAnalyticsID"
+            withDefault:@""];
+        
+        //Parse push
+        _parseApplicationId                  = [self stringSettingForKey:@"parseApplicationId"
+                                                              withDefault:@""];
+        _parseClientKey                      = [self stringSettingForKey:@"parseClientKey"
+                                                            withDefault:@""];
     }
     return self;
 }
