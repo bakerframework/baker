@@ -37,10 +37,13 @@
 #import "BKRBakerAPI.h"
 #import "UIColor+BakerExtensions.h"
 #import "BKRUtils.h"
-
+#import <Parse/Parse.h>
 #import "BKRSettings.h"
 #import "BKRBookViewController.h"
 #import "BKRAnalyticsEvents.h"
+
+#import <ADMag/ADMag.h>
+#import <ADMag/ADMagAdsInfo.h>
 
 #pragma mark - Initialization
 
@@ -54,23 +57,34 @@
 }
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
-
     if ([BKRSettings sharedSettings].isNewsstand) {
         [self configureNewsstandApp:application options:launchOptions];
-    } else {
-        [self configureStandAloneApp:application options:launchOptions];
+        
+        
+        [ADMag startWithAPIKey:[BKRSettings sharedSettings].admagApiKey];
+        
+        //PARSE push
+        [Parse setApplicationId:[BKRSettings sharedSettings].parseApplicationId
+                      clientKey:[BKRSettings sharedSettings].parseClientKey];
+        
+        // Register for Push Notitications
+        UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                        UIUserNotificationTypeBadge |
+                                                        UIUserNotificationTypeSound);
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                                 categories:nil];
+        [application registerUserNotificationSettings:settings];
+        [application registerForRemoteNotifications];
+        //END parse
+        
+    }else{
+        if([[BKRIssuesManager localBooksList] count] == 1) {
+            self.window.rootViewController = [[BKRBookViewController alloc] initWithIssue:[BKRIssuesManager localBooksList][0]];
+            [self.window makeKeyAndVisible];
+        }
     }
-
-    self.rootNavigationController = [[BKRCustomNavigationController alloc] initWithRootViewController:self.rootViewController];
-
-    [self configureNavigationBar];
-    [self configureAnalytics];
-
-    self.window = [[BKRInterceptorWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.window.backgroundColor    = [UIColor whiteColor];
-    self.window.rootViewController = self.rootNavigationController;
-    [self.window makeKeyAndVisible];
     
+    [self configureAnalytics];
     return YES;
 }
 
@@ -119,30 +133,7 @@
             dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
         }
     }
-    
-    self.rootViewController = [[BKRShelfViewController alloc] init];
 
-}
-
-- (void)configureStandAloneApp:(UIApplication*)application options:(NSDictionary*)launchOptions {
-    
-    NSLog(@"====== Baker Standalone Mode enabled ======");
-    NSArray *books = [BKRIssuesManager localBooksList];
-    if (books.count == 1) {
-        BKRBook *book = [books[0] bakerBook];
-        self.rootViewController = [[BKRBookViewController alloc] initWithBook:book];
-    } else  {
-        self.rootViewController = [[BKRShelfViewController alloc] initWithBooks:books];
-    }
-
-}
-
-- (void)configureNavigationBar {
-    BKRCustomNavigationBar *navigationBar = (BKRCustomNavigationBar*)self.rootNavigationController.navigationBar;
-    navigationBar.tintColor           = [UIColor bkrColorWithHexString:[BKRSettings sharedSettings].issuesActionBackgroundColor];
-    navigationBar.barTintColor        = [UIColor bkrColorWithHexString:@"ffffff"];
-    navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor bkrColorWithHexString:@"000000"]};
-    [navigationBar setBackgroundImage:[UIImage imageNamed:@"navigation-bar-bg"] forBarMetrics:UIBarMetricsDefault];
 }
 
 - (void)configureAnalytics {
@@ -166,7 +157,7 @@
         return;
     }
     
-    NSString *apnsToken = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    /*NSString *apnsToken = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
     apnsToken = [apnsToken stringByReplacingOccurrencesOfString:@" " withString:@""];
 
     NSLog(@"[AppDelegate] My token (as NSData) is: %@", deviceToken);
@@ -176,7 +167,12 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 
     BKRBakerAPI *api = [BKRBakerAPI sharedInstance];
-    [api postAPNSToken:apnsToken];
+    [api postAPNSToken:apnsToken];*/
+    
+    // Store the deviceToken in the current installation and save it to Parse.
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    [currentInstallation saveInBackground];
 
 }
 
@@ -185,12 +181,12 @@
     if (![BKRSettings sharedSettings].isNewsstand) {
         return;
     }
-
+    /*
     NSDictionary *aps = userInfo[@"aps"];
     if (aps && aps[@"content-available"]) {
         [self applicationWillHandleNewsstandNotificationOfContent:userInfo[@"content-name"]];
-    }
-
+    }*/
+    [PFPush handlePush:userInfo];
 }
 
 /*
@@ -245,6 +241,14 @@
         }];
     }];
 
+}
+
+- (BKRInterceptorWindow *)window {
+    static BKRInterceptorWindow *customWindow = nil;
+    if (!customWindow) {
+        customWindow = [[BKRInterceptorWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    }
+    return customWindow;
 }
 
 #pragma mark - Application Lifecycle

@@ -33,11 +33,14 @@
 #import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
 
+@protocol BKRPurchasesManagerDelegate;
+
 @interface BKRPurchasesManager : NSObject <SKProductsRequestDelegate, SKPaymentTransactionObserver> {
     NSMutableDictionary *_purchases;
     BOOL _enableProductRequestFailureNotifications;
 }
 
+@property (nonatomic, weak) IBOutlet id<BKRPurchasesManagerDelegate> delegate;
 @property (nonatomic, strong) NSMutableDictionary *products;
 @property (nonatomic, strong) NSNumberFormatter *numberFormatter;
 @property (nonatomic, assign) BOOL subscribed;
@@ -77,5 +80,21 @@
 #pragma mark - Subscriptions
 
 - (BOOL)hasSubscriptions;
+
+@end
+
+@protocol BKRPurchasesManagerDelegate <NSObject>
+
+- (void)purchasesManager:(BKRPurchasesManager *)manager retrievedProductIds:(NSMutableSet *)productIds;
+- (void)purchasesManager:(BKRPurchasesManager *)manager productsRequestFailedWithError:(NSError *)error;
+- (void)purchasesManager:(BKRPurchasesManager *)manager purchasedSubscriptionWithTransaction:(SKPaymentTransaction *)transaction;
+- (void)purchasesManager:(BKRPurchasesManager *)manager subscriptionFailedForTransaction:(SKPaymentTransaction *)transaction;
+- (void)purchasesManager:(BKRPurchasesManager *)manager subscriptionRestoredForTransaction:(SKPaymentTransaction *)transaction;
+- (void)purchasesManager:(BKRPurchasesManager *)manager productRestoredForTransaction:(SKPaymentTransaction *)transaction;
+- (void)purchasesManager:(BKRPurchasesManager *)manager restoreFailedWithError:(NSError *)error;
+- (void)purchasesManager:(BKRPurchasesManager *)manager handleMultipleRestores:(NSArray *)transactions;
+- (void)purchasesManager:(BKRPurchasesManager *)manager handleNotRecognizedTransaction:(SKPaymentTransaction *)transaction;
+- (void)purchasesManager:(BKRPurchasesManager *)manager purchasedProductWithTransaction:(SKPaymentTransaction *)transaction;
+- (void)purchasesManager:(BKRPurchasesManager *)manager productPurchaseFailedForTransaction:(SKPaymentTransaction *)transaction;
 
 @end

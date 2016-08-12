@@ -41,6 +41,9 @@
 #import "NSObject+BakerExtensions.h"
 #import "UIScreen+BakerExtensions.h"
 
+#import <ADMag/ADMag.h>
+#import <ADMag/ADMagAdsInfo.h>
+
 #define INDEX_FILE_NAME         @"index.html"
 
 #define URL_OPEN_MODALLY        @"referrer=Baker"
@@ -53,115 +56,108 @@
 @implementation BKRBookViewController
 
 #pragma mark - INIT
-- (id)initWithBook:(BKRBook *)bakerBook {
 
+- (id)initWithIssue:(BKRIssue *)issue {
     self = [super init];
     if (self) {
-        NSLog(@"[BakerView] Init book view...");
-        
-        _book = bakerBook;
-
-        if ([self respondsToSelector:@selector(automaticallyAdjustsScrollViewInsets)]) {
-            // Only available in iOS 7 +
-            self.automaticallyAdjustsScrollViewInsets = NO;
-        }
-
-        // ****** DEVICE SCREEN BOUNDS
-        screenBounds = [[UIScreen mainScreen] bounds];
-        NSLog(@"[BakerView]     Device Screen (WxH): %fx%f.", screenBounds.size.width, screenBounds.size.height);
-
-        // ****** SUPPORTED ORIENTATION FROM PLIST
-        supportedOrientation = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UISupportedInterfaceOrientations"];
-
-        if (![[NSFileManager defaultManager] fileExistsAtPath:self.bkrCachePath]) {
-            [[NSFileManager defaultManager] createDirectoryAtPath:self.bkrCachePath withIntermediateDirectories:YES attributes:nil error:nil];
-        }
-
-        // ****** SCREENSHOTS DIRECTORY //TODO: set in load book only if is necessary
-        defaultScreeshotsPath = [[self.bkrCachePath stringByAppendingPathComponent:@"screenshots"] stringByAppendingPathComponent:bakerBook.ID];
-
-        // ****** STATUS FILE
-        bookStatus = [[BKRBookStatus alloc] initWithBookId:bakerBook.ID];
-        NSLog(@"[BakerView]     Status: page %@ @ scrollIndex %@px.", bookStatus.page, bookStatus.scrollIndex);
-
-        // ****** Initialize audio session for html5 audio
-        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        BOOL ok;
-        NSError *setCategoryError = nil;
-        ok = [audioSession setCategory:AVAudioSessionCategoryPlayback
-                                 error:&setCategoryError];
-        if (!ok) {
-            NSLog(@"[BakerView]     AudioSession - %s setCategoryError=%@", __PRETTY_FUNCTION__, setCategoryError);
-        }
-
-        // ****** BOOK ENVIRONMENT
-        pages  = [NSMutableArray array];
-        toLoad = [NSMutableArray array];
-
-        pageDetails = [NSMutableArray array];
-
-        attachedScreenshotPortrait  = [NSMutableDictionary dictionary];
-        attachedScreenshotLandscape = [NSMutableDictionary dictionary];
-
-        tapNumber = 0;
-        stackedScrollingAnimations = 0; // TODO: CHECK IF STILL USED!
-
-        currentPageFirstLoading = YES;
-        currentPageIsDelayingLoading = YES;
-        currentPageHasChanged = NO;
-        currentPageIsLocked = NO;
-        currentPageWillAppearUnderModal = NO;
-
-        userIsScrolling = NO;
-        shouldPropagateInterceptedTouch = YES;
-        shouldForceOrientationUpdate = YES;
-
-        adjustViewsOnAppDidBecomeActive = NO;
-        _barsHidden = NO;
-
-        webViewBackground = nil;
-
-        pageNameFromURL = nil;
-        anchorFromURL = nil;
-
-        // TODO: LOAD BOOK METHOD IN VIEW DID LOAD
-        [self loadBookWithBookPath:bakerBook.path];
+        [self configureWithIssue:issue];
     }
     return self;
 }
+
+- (void)configureWithIssue:(BKRIssue *)issue {
+    self.issue = issue;
+    if ([BKRSettings sharedSettings].isNewsstand) {
+        self.book = [[BKRBook alloc] initWithBookPath:issue.path bundled:NO];
+    } else {
+        self.book = [issue bakerBook];
+    }
+    NSLog(@"[BakerView] Init book view...");
+    
+    if ([self respondsToSelector:@selector(automaticallyAdjustsScrollViewInsets)]) {
+        // Only available in iOS 7 +
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
+    
+    // ****** DEVICE SCREEN BOUNDS
+    screenBounds = [[UIScreen mainScreen] bounds];
+    NSLog(@"[BakerView]     Device Screen (WxH): %fx%f.", screenBounds.size.width, screenBounds.size.height);
+    
+    // ****** SUPPORTED ORIENTATION FROM PLIST
+    supportedOrientation = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UISupportedInterfaceOrientations"];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:self.bkrCachePath]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:self.bkrCachePath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    
+    // ****** SCREENSHOTS DIRECTORY //TODO: set in load book only if is necessary
+    defaultScreeshotsPath = [[self.bkrCachePath stringByAppendingPathComponent:@"screenshots"] stringByAppendingPathComponent:_book.ID];
+    
+    // ****** STATUS FILE
+    bookStatus = [[BKRBookStatus alloc] initWithBookId:_book.ID];
+    NSLog(@"[BakerView]     Status: page %@ @ scrollIndex %@px.", bookStatus.page, bookStatus.scrollIndex);
+    
+    // ****** Initialize audio session for html5 audio
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    BOOL ok;
+    NSError *setCategoryError = nil;
+    ok = [audioSession setCategory:AVAudioSessionCategoryPlayback
+                             error:&setCategoryError];
+    if (!ok) {
+        NSLog(@"[BakerView]     AudioSession - %s setCategoryError=%@", __PRETTY_FUNCTION__, setCategoryError);
+    }
+    
+    // ****** BOOK ENVIRONMENT
+    pages  = [NSMutableArray array];
+    toLoad = [NSMutableArray array];
+    
+    pageDetails = [NSMutableArray array];
+    
+    attachedScreenshotPortrait  = [NSMutableDictionary dictionary];
+    attachedScreenshotLandscape = [NSMutableDictionary dictionary];
+    
+    tapNumber = 0;
+    stackedScrollingAnimations = 0; // TODO: CHECK IF STILL USED!
+    
+    currentPageFirstLoading = YES;
+    currentPageIsDelayingLoading = YES;
+    currentPageHasChanged = NO;
+    currentPageIsLocked = NO;
+    currentPageWillAppearUnderModal = NO;
+    
+    userIsScrolling = NO;
+    shouldPropagateInterceptedTouch = YES;
+    shouldForceOrientationUpdate = YES;
+    
+    adjustViewsOnAppDidBecomeActive = NO;
+    _barsHidden = NO;
+    
+    webViewBackground = nil;
+    
+    pageNameFromURL = nil;
+    anchorFromURL = nil;
+    
+    // TODO: LOAD BOOK METHOD IN VIEW DID LOAD
+    [self loadBookWithBookPath:_book.path];
+}
+
 - (void)viewDidLoad {
 
     [super viewDidLoad];
     self.navigationItem.title = self.book.title;
-    
     
     // ****** SET THE INITIAL SIZE FOR EVERYTHING
     // Avoids strange animations when opening
     [self setPageSize:[self getCurrentInterfaceOrientation:self.interfaceOrientation]];
 
     // SOCIAL MEDIA INTEGRATION - START
-    if ([BKRSettings sharedSettings].showSocialShareButton) {
-        self.shareButton = [[UIBarButtonItem alloc]
-                            initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-                            target:self
-                            action:@selector(shareBtnAction:)];
-        self.navigationItem.rightBarButtonItem = self.shareButton;
+    if (![BKRSettings sharedSettings].showSocialShareButton) {
+        [self.navigationItem setRightBarButtonItem:nil];
     }
     // SOCIAL MEDIA INTEGRATION - END
     
-    // ****** SCROLLVIEW INIT
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, pageWidth, pageHeight)];
-    self.scrollView.showsHorizontalScrollIndicator = YES;
-    self.scrollView.showsVerticalScrollIndicator   = NO;
-    self.scrollView.delaysContentTouches           = NO;
-    self.scrollView.pagingEnabled                  = YES;
-    self.scrollView.delegate                       = self;
-
     self.scrollView.scrollEnabled   = [self.book.bakerPageTurnSwipe boolValue];
     self.scrollView.backgroundColor = [BKRUtils colorWithHexString:self.book.bakerBackground];
-
-    [self.view addSubview:self.scrollView];
-
 
     // ****** BAKER BACKGROUND
     backgroundImageLandscape   = nil;
@@ -243,10 +239,7 @@
     return newImage;
 }
 
-
-
-- (void) shareBtnAction:(UIButton *)sender {
-    
+- (IBAction)handleShareButtonPressed:(id)sender {
     if (![self checkScreeshotForPage:_currentPageNumber andOrientation:[self getCurrentInterfaceOrientation:self.interfaceOrientation]]) {
         [self takeScreenshotFromView:_currPage forPage:_currentPageNumber andOrientation:[self getCurrentInterfaceOrientation:self.interfaceOrientation]];
     }
@@ -332,7 +325,7 @@
     int lastPageViewed = [bookStatus.page intValue];
     int bakerStartAtPage = [self.book.bakerStartAtPage intValue];
     self.currentPageNumber = 1;
-
+    
     if (currentPageFirstLoading && lastPageViewed != 0) {
         self.currentPageNumber = lastPageViewed;
     } else if (bakerStartAtPage < 0) {
@@ -399,8 +392,32 @@
     [pageDetails removeAllObjects];
 }
 - (void)buildPageArray {
+    
+    NSArray *ads = [[ADMag sharedInstance] infoAdsForIssueIdentifier:self.book.ID];
+    
     for (id page in self.book.contents) {
+        int index = [self.book.contents indexOfObject:page];
+        int numPage = 0;
+        
+        if (index <=1 ){
+            numPage = index + 1;
+        }else if (index == 3){
+            numPage = index + 2;
 
+        }else if (index >= 4){
+            numPage = index + 3;
+        }
+        
+        //NSLog(@"INDEX: %d PAGE %d",index, numPage);
+        for (ADMagAdsInfo *adsInfo in ads)
+        {
+            if (numPage == (int)adsInfo.pageNumber){
+                NSLog(@"Open Page Number:%d Campaign: %@ UUID: %@", adsInfo.pageNumber , adsInfo.campaigName, adsInfo.uuid);
+                [pages addObject:@"ads"];
+                break;
+            }
+        }
+        
         NSString *pageFile = nil;
         if ([page isKindOfClass:[NSString class]]) {
             pageFile = [self.book.path stringByAppendingPathComponent:page];
@@ -413,8 +430,10 @@
         } else {
             NSLog(@"[BakerView] ERROR: Page %@ does not exist in %@.", page, self.book.path);
         }
-    }
+      
 
+    }
+    
     totalPages = (int)[pages count];
     NSLog(@"[BakerView]     Pages in this book: %d", totalPages);
 }
@@ -453,11 +472,12 @@
 }
 - (void)buildPageDetails {
     //NSLog(@"[BakerView] Init page details for the book pages");
-
+    
+    NSArray *ads = [[ADMag sharedInstance] infoAdsForIssueIdentifier:self.book.ID];
+    
     for (int i = 0; i < totalPages; i++) {
 
         UIColor *foregroundColor = [BKRUtils colorWithHexString:self.book.bakerPageNumbersColor];
-
 
         // ****** Background
         UIImageView *backgroundView = [[UIImageView alloc] initWithFrame:CGRectMake(pageWidth * i, 0, pageWidth, pageHeight)];
@@ -494,16 +514,30 @@
         }
 
         [self.scrollView addSubview:number];
-
-
-        // ****** Title
-        BKRPageTitleLabel *title = [[BKRPageTitleLabel alloc]initWithFile:pages[i] color:foregroundColor alpha:[self.book.bakerPageNumbersAlpha floatValue]];
+        
+        NSMutableDictionary *details;
+        BKRPageTitleLabel *title;
+        
+        if ([pages[i]  isEqual: @"ads"]){
+            int numPage = i + 1;
+            NSString *titleName;
+            for (ADMagAdsInfo *adsInfo in ads)
+            {
+                if (numPage == (int)adsInfo.pageNumber){
+                    titleName = adsInfo.campaigName;
+                    break;
+                }
+            }
+            title = [[BKRPageTitleLabel alloc]initWithName:titleName color:foregroundColor alpha:[self.book.bakerPageNumbersAlpha floatValue]];
+        }
+        else{
+           title = [[BKRPageTitleLabel alloc]initWithFile:pages[i] color:foregroundColor alpha:[self.book.bakerPageNumbersAlpha floatValue]];
+        }
+        
+        // ****** Store instances for later use
         [title setX:(pageWidth * i + ((pageWidth - title.frame.size.width) / 2)) Y:(pageHeight / 2 + 20)];
         [self.scrollView addSubview:title];
-
-
-        // ****** Store instances for later use
-        NSMutableDictionary *details = [NSMutableDictionary dictionaryWithObjectsAndKeys:spinner, @"spinner", number, @"number", title, @"title", backgroundView, @"background", nil];
+        details = [NSMutableDictionary dictionaryWithObjectsAndKeys:spinner, @"spinner", number, @"number", title, @"title", backgroundView, @"background", nil];
         [pageDetails insertObject:details atIndex:i];
     }
 }
@@ -653,9 +687,9 @@
 
     webView.backgroundColor = [UIColor clearColor];
     webView.opaque = NO;
-
-    webView.delegate = self;
-
+    //if(![webView isKindOfClass:[ADMagWebView class]])
+    [webView setDelegate:self];
+    
     webView.mediaPlaybackRequiresUserAction = ![self.book.bakerMediaAutoplay boolValue];
     webView.allowsInlineMediaPlayback = YES;
     webView.scalesPageToFit = [self.book.zoomable boolValue];
@@ -670,6 +704,7 @@
     if (!webView.scalesPageToFit) {
         [self removeWebViewDoubleTapGestureRecognizer:webView];
     }
+    webView.scalesPageToFit = TRUE;
 }
 - (void)removeWebViewDoubleTapGestureRecognizer:(UIView *)view
 {
@@ -733,7 +768,8 @@
 - (void)gotoPage {
 
     NSString *path = [NSString stringWithString:pages[self.currentPageNumber - 1]];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:path] && tapNumber != 0) {
+    
+    if (([[NSFileManager defaultManager] fileExistsAtPath:path] || [path isEqual:@"ads"]) && tapNumber != 0) {
 
         //NSLog(@"[BakerView] Goto page -> %@", [[NSFileManager defaultManager] displayNameAtPath:path]);
 
@@ -946,12 +982,28 @@
 }
 - (void)loadSlot:(int)slot withPage:(int)page {
     //NSLog(@"[BakerView] Setting up slot %d with page %d.", slot, page);
-
-    UIWebView *webView = [[UIWebView alloc] init];
-    [self setupWebView:webView];
-
-    webView.frame = [self frameForPage:page];
+    __block UIWebView *webView;
+    
+    if ([pages[page - 1]  isEqual: @"ads"]){
+        ADMag *adapi = [ADMag sharedInstance];
+        [adapi adWebViewForIssueWithIdentifier:self.book.ID
+                pageNumber:[NSNumber numberWithInt:page]
+                   success:^(ADMagWebView *webViewAdmag) {
+                       webView = webViewAdmag;
+                   } failure:^(NSError *error) {
+                       
+                   }
+        ];
+    }else{
+        webView = [[UIWebView alloc] init];
+    }
+    
     webView.hidden = YES;
+    
+    [self setupWebView:webView];
+    webView.frame = [self frameForPage:page];
+    
+    
 
     // ****** SELECT
     // Since pointers can change at any time we've got to handle them directly on a slot basis.
@@ -990,20 +1042,26 @@
         prevPage = webView;
     }
 
-
     ((UIScrollView *)[webView subviews][0]).pagingEnabled = [self.book.bakerVerticalPagination boolValue];
-
+    
     [self.scrollView addSubview:webView];
-    [self loadWebView:webView withPage:page];
+    if (![pages[page - 1]  isEqual: @"ads"]){
+        [self loadWebView:webView withPage:page];
+    }
+    
 }
-- (BOOL)loadWebView:(UIWebView*)webView withPage:(int)page {
-
-    NSString *path = [NSString stringWithString:pages[page - 1]];
-
-    if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        NSLog(@"[BakerView] Loading: %@", [[NSFileManager defaultManager] displayNameAtPath:path]);
-        [webView loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:path]]];
+- (BOOL)loadWebView:(ADMagWebView*)webView withPage:(int)page {
+    
+    if ([pages[page - 1]  isEqual: @"ads"]){
         return YES;
+    }else{
+        NSString *path = [NSString stringWithString:pages[page - 1]];
+
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+            NSLog(@"[BakerView] Loading: %@", [[NSFileManager defaultManager] displayNameAtPath:path]);
+            [webView loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:path]]];
+            return YES;
+        }
     }
     return NO;
 }
@@ -1057,6 +1115,11 @@
     NSLog(@"[BakerView] Swiping to page: %d", page);
 
     if (self.currentPageNumber != page) {
+        
+        if ([self.currPage isKindOfClass:[ADMagWebView class]]){
+            ADMagWebView *admagWebView = (ADMagWebView*)self.currPage;
+            [admagWebView onHide];
+        }
 
         lastPageNumber = self.currentPageNumber;
         self.currentPageNumber = page;
@@ -1078,11 +1141,12 @@
 }
 
 #pragma mark - WEBVIEW
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
-
+- (BOOL)webView:(ADMagWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    
+    
     // Sent before a web view begins loading content, useful to trigger actions before the WebView.
     NSURL *url = [request URL];
-
+    
     if ([webView isEqual:prevPage])
     {
         //NSLog(@"[BakerView]     Page is prev page --> load page");
@@ -1351,11 +1415,24 @@
 
         [self handlePageLoading];
     }
-
-    /** CHECK IF META TAG SAYS HTML FILE SHOULD BE PAGED **/
-    [webView.scrollView setPagingEnabled:[BKRUtils webViewShouldBePaged:webView forBook:self.book]];
+    
+    
+    if ([self.currPage isKindOfClass:[ADMagWebView class]]){
+        ADMagWebView *admagWebView = (ADMagWebView*) self.currPage;
+        admagWebView.hidden = NO;
+        [admagWebView onShow];
+        
+        
+        /** CHECK IF META TAG SAYS HTML FILE SHOULD BE PAGED **/
+        [webView.scrollView setPagingEnabled:TRUE];
+    }else{
+        
+        /** CHECK IF META TAG SAYS HTML FILE SHOULD BE PAGED **/
+        [webView.scrollView setPagingEnabled:[BKRUtils webViewShouldBePaged:webView forBook:self.book]];
+    }
+    
 }
-- (void)webView:(UIWebView *)webView hidden:(BOOL)status animating:(BOOL)animating {
+- (void)webView:(ADMagWebView *)webView hidden:(BOOL)status animating:(BOOL)animating {
 
     //NSLog(@"[BakerView] webView hidden: %d animating: %d", status, animating);
 
@@ -1363,7 +1440,7 @@
 
         webView.hidden = NO;
         webView.alpha = 0.0;
-
+        
         [self.scrollView addSubview:webView];
         [UIView animateWithDuration:0.5
                          animations:^{ webView.alpha = 1.0; }
@@ -1929,6 +2006,7 @@
         // Baker book is disappearing because it was popped from the navigation stack -> Baker book is closing
         [[NSNotificationCenter defaultCenter] postNotificationName:@"BakerIssueClose" object:self]; // -> Baker Analytics Event
         [self saveBookStatusWithScrollIndex];
+        self.issue.status = BakerIssueStatusNone;
     }
 }
 - (void)saveBookStatusWithScrollIndex {

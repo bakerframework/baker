@@ -1,0 +1,23 @@
+PODS:
+  - AFNetworking (1.3.4)
+  - MagicalRecord (2.2):
+    - MagicalRecord/Core (= 2.2)
+  - MagicalRecord/Core (2.2)
+  - Mantle (1.5):
+    - Mantle/extobjc (= 1.5)
+  - Mantle/extobjc (1.5)
+  - ZipArchive (1.4.0)
+
+DEPENDENCIES:
+  - AFNetworking (<= 1.3.4)
+  - MagicalRecord (= 2.2)
+  - Mantle (= 1.5)
+  - ZipArchive (>= 1.3.0)
+
+SPEC CHECKSUMS:
+  AFNetworking: cf8e418e16f0c9c7e5c3150d019a3c679d015018
+  MagicalRecord: f8a56bb87ab6552f20c4bb8681a1958a197ea3cd
+  Mantle: 3bf6db311c8b4a19b6be01f2483fa4590aa166f3
+  ZipArchive: e25a4373192673e3229ac8d6e9f64a3e5713c966
+
+COCOAPODS: 0.38.2

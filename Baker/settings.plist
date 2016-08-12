@@ -89,5 +89,15 @@
 	<string>#bc242a</string>
 	<key>showSocialShareButton</key>
 	<true/>
+	<key>admagApiKey</key>
+	<string>456d31c3e67c6c2763b974e596989c34e4e24af9</string>
+	<key>admagPublicationId</key>
+	<string>1</string>
+	<key>googleAnalyticsID</key>
+	<string>UA-57026936-3</string>
+	<key>parseApplicationId</key>
+	<string>7kWAGHEPB33jO1mVBqd2n1mBTFe73embCD3zLeuz</string>
+	<key>parseClientKey</key>
+	<string>MUyz9RSX1ghEKWCZBD7bsxCMRKSjqSmjCcRZCgVV</string>
 </dict>
 </plist>
