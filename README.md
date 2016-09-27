@@ -18,15 +18,15 @@ to create books with real typography, real layouts and high-quality design.
 HOW TO USE BAKER
 ----------------
 
-Creating an ebook in HTML5 to be used with Baker is a three-steps operation.
+Creating an ebook in HTML5 to be used with Baker is a three-step operation.
 It's easier done than said! ;)
 
 1. DESIGN
    * Create you publication as one or more **HTML5 files** like a standalone website
-   * Design your publication to fit multiple screen (using CSS media-queries)
+   * Design your publication to fit multiple screens (using CSS media-queries)
    * You can use **any** feature in WebKit: HTML5, CSS3, JavaScript (video, audio, fonts, jQuery, Google Maps, etc)
    * On iPad/iPhone you can constrain the height to match the page size or make it scrollable if you need longer pages
-   * For best results, consider having 1 HTML for each chapter/section/article and use the native vertical scrolling.
+   * For best results, consider having 1 HTML file for each chapter/section/article and use the native vertical scrolling.
    * ...remember: it's a publication. If you want to build an app, check [PhoneGap](http://www.phonegap.com/). ;)
 
 2. PACKAGE
@@ -42,7 +42,7 @@ It's easier done than said! ;)
    * Download Xcode from the Mac App Store or from the Apple Developer website.
    * Decide if you want to release using the [Standalone tutorial](https://github.com/bakerframework/baker/wiki/Tutorial-for-Standalone-App) or [Newsstand tutorial](https://github.com/bakerframework/baker/wiki/Tutorial-for-Newsstand-with-Free-issues) mode and follow the tutorial accordingly.
    * Select the Baker Scheme (Simulator or Device) from the toolbar dropdown.
-   * Run and check that everything works correctly _both_ on simulator and device.
+   * Run and check that everything works correctly _both_ on simulator and device(s).
    * Check [this page](https://github.com/bakerframework/baker/wiki/Problems-and-Debugging) if you encounter any problem.
    * Create an Apple iPhone Developer account to publish on the App Store.
    * If you are using Newsstand, follow the instructions on the Apple iPhone Developer website to create either your free subscription or paid subscription / issue In App Purchases
